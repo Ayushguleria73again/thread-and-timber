@@ -101,8 +101,8 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-4">
                             <div className="h-10 w-10 rounded-xl bg-sand flex items-center justify-center text-[10px] font-serif italic text-black/40">#{order._id.slice(-4).toUpperCase()}</div>
                             <div>
-                                <p className="text-xs font-bold text-black">{order.shippingAddress.name}</p>
-                                <p className="text-[9px] uppercase tracking-widest text-black/40">{order.items.length} Items • {order.shippingAddress.city}, {order.shippingAddress.state}</p>
+                                <p className="text-xs font-bold text-black">{order.shippingAddress?.name}</p>
+                                <p className="text-[9px] uppercase tracking-widest text-black/40">{(order.items || []).length} Items • {order.shippingAddress?.city}, {order.shippingAddress?.state}</p>
                             </div>
                         </div>
                         <div className="text-right">

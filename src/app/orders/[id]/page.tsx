@@ -121,7 +121,7 @@ export default function OrderConfirmationPage() {
               <div className="mt-4 space-y-2 text-sm text-black/70">
                 <p>Order #: {order._id.slice(-8)}</p>
                 <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                <p>Items: {order.items.length}</p>
+                <p>Items: {order.items?.length || 0}</p>
                 <p className="mt-4 font-semibold text-black">
                   Total: ${order.total.toFixed(2)}
                 </p>
@@ -131,11 +131,11 @@ export default function OrderConfirmationPage() {
             <div className="rounded-3xl border border-black/5 bg-white/70 p-6">
               <h3 className="text-lg font-semibold text-black">Shipping Address</h3>
               <div className="mt-4 text-sm text-black/70">
-                <p>{order.shippingAddress.name}</p>
-                <p>{order.shippingAddress.address}</p>
+                <p>{order.shippingAddress?.name}</p>
+                <p>{order.shippingAddress?.address || order.shippingAddress?.street}</p>
                 <p>
-                  {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
-                  {order.shippingAddress.zip}
+                  {order.shippingAddress?.city}, {order.shippingAddress?.state}{" "}
+                  {order.shippingAddress?.zip}
                 </p>
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function OrderConfirmationPage() {
           <div className="mt-6 rounded-3xl border border-black/5 bg-white/70 p-6">
             <h3 className="text-lg font-semibold text-black">Order Items</h3>
             <div className="mt-4 space-y-4">
-              {order.items.map((item: any) => (
+            {(order.items || []).map((item: any) => (
                 <div
                   key={item.product}
                   className="flex items-center gap-4 rounded-2xl border border-black/5 bg-sand/50 p-4"

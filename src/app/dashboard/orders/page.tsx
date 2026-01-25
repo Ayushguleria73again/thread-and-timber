@@ -119,7 +119,7 @@ export default function OrdersPage() {
                             </div>
                             <div className="p-6">
                                 <div className="space-y-4">
-                                    {order.orderItems.map((item: any, idx: number) => (
+                                    {(order.items || []).map((item: any, idx: number) => (
                                         <div key={idx} className="flex items-center gap-4">
                                             <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-black/5 bg-sand">
                                                 {/* Image handling would verify specific structure, using placeholder for safety if needed */}

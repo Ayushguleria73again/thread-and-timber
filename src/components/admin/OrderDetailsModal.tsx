@@ -61,7 +61,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order }: OrderDetai
             <div>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-4 flex items-center gap-2"><FiPackage /> Artisan Pieces</p>
                 <div className="space-y-4">
-                    {order.items.map((item: any, idx: number) => (
+                    {(order.items || []).map((item: any, idx: number) => (
                         <div key={idx} className="flex items-center justify-between py-2 border-b border-black/[0.03] last:border-0">
                             <div className="flex items-center gap-4">
                                 <div className="h-12 w-12 rounded-xl bg-sand overflow-hidden border border-black/5">
