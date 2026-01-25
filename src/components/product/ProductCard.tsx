@@ -57,17 +57,17 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
       </div>
       <div className="relative h-52 overflow-hidden rounded-2xl border border-black/5 bg-sand/60 z-0">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover transition duration-300 group-hover:scale-105"
-        />
-        {product.inventory > 0 && product.inventory <= 5 && (
+        {product.inventory === 0 ? (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-sand/40 backdrop-blur-[2px]">
+            <div className="rounded-full bg-black/80 px-6 py-2 text-[10px] uppercase tracking-[0.3em] font-bold text-sand shadow-lg">
+              Sold Out
+            </div>
+          </div>
+        ) : product.inventory > 0 && product.inventory <= 5 ? (
           <div className="absolute bottom-3 right-3 rounded-full bg-red-800/90 px-3 py-1 text-[8px] uppercase tracking-[0.2em] font-bold text-white shadow-sm backdrop-blur-sm animate-pulse">
             Only {product.inventory} left
           </div>
-        )}
+        ) : null}
       </div>
       <div className="flex flex-1 flex-col gap-3">
         <div className="flex items-center gap-3">
@@ -94,10 +94,21 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           {formatCurrency(product.price)}
         </span>
         <button
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); addItem(product); }}
-          className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black transition hover:border-black/30 bg-white"
+          onClick={(e) => { 
+            if (product.inventory > 0) {
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                addItem(product); 
+            }
+          }}
+          disabled={product.inventory === 0}
+          className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs uppercase tracking-[0.24em] transition-all ${
+            product.inventory === 0 
+                ? "border-black/5 bg-black/5 text-black/20 cursor-not-allowed" 
+                : "border-black/10 bg-white text-black hover:border-black/30"
+          }`}
         >
-          <FiShoppingBag /> Add to cart
+          <FiShoppingBag /> {product.inventory === 0 ? "Unavailable" : "Add to cart"}
         </button>
       </div>
     </motion.article>
