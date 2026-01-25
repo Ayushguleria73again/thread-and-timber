@@ -1,4 +1,3 @@
-import seedUsers from "@/data/users.json";
 
 export type Address = {
   id: string;
@@ -17,7 +16,7 @@ export type User = {
   _id?: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   addresses?: Address[];
   preferences?: {
     notifications: {
@@ -44,34 +43,9 @@ export type User = {
   isAdmin?: boolean;
 };
 
-const USERS_KEY = "thread-timber-users";
 const CURRENT_USER_KEY = "thread-timber-current-user";
 
 const isBrowser = () => typeof window !== "undefined";
-
-export const getStoredUsers = (): User[] => {
-  if (!isBrowser()) return seedUsers as User[];
-  const stored = window.localStorage.getItem(USERS_KEY);
-  if (!stored) return seedUsers as User[];
-  try {
-    return JSON.parse(stored) as User[];
-  } catch {
-    return seedUsers as User[];
-  }
-};
-
-export const saveUsers = (users: User[]) => {
-  if (!isBrowser()) return;
-  window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
-};
-
-export const seedUsersIfNeeded = () => {
-  if (!isBrowser()) return;
-  const stored = window.localStorage.getItem(USERS_KEY);
-  if (!stored) {
-    window.localStorage.setItem(USERS_KEY, JSON.stringify(seedUsers));
-  }
-};
 
 export const getCurrentUser = (): User | null => {
   if (!isBrowser()) return null;
@@ -92,4 +66,3 @@ export const setCurrentUser = (user: User | null) => {
   }
   window.localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 };
-

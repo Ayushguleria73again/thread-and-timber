@@ -97,7 +97,8 @@ export default function PaymentClient() {
     if (!couponCode) return;
     setIsApplyingCoupon(true);
     try {
-      const res = await fetch("http://localhost:5001/api/coupons/validate", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/coupons/validate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: couponCode })
@@ -147,7 +148,8 @@ export default function PaymentClient() {
     };
 
     try {
-      const res = await fetch("http://localhost:5001/api/orders", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

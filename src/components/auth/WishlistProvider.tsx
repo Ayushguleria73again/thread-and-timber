@@ -90,8 +90,9 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
     // If logged in, sync with backend
     const token = localStorage.getItem("thread-timber-token");
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     try {
-      const res = await fetch("http://localhost:5001/api/auth/wishlist/toggle", {
+      const res = await fetch(`${apiUrl}/auth/wishlist/toggle`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

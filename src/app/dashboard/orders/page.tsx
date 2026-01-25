@@ -20,7 +20,8 @@ export default function OrdersPage() {
         if (!token) return;
         
         try {
-            const res = await fetch("http://localhost:5001/api/orders/myorders", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const res = await fetch(`${apiUrl}/orders/myorders`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.ok) {
@@ -93,7 +94,7 @@ export default function OrdersPage() {
                 </div>
             ) : (
                 <div className="space-y-6">
-                    {orders.map((order) => (
+                    {orders.map((order: any) => (
                         <div key={order._id} className="group overflow-hidden rounded-3xl border border-black/5 bg-white/80 transition hover:border-black/10 hover:shadow-soft">
                             <div className="border-b border-black/5 bg-sand/20 p-6 flex flex-wrap items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">

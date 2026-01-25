@@ -45,7 +45,7 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
   const tags = ["best seller", "new", "limited", "crafted"];
 
   const availableMaterials = useMemo(() => 
-    Array.from(new Set(products.map(p => p.materials).filter(Boolean))), 
+    Array.from(new Set(products.map(p => p.materials).filter((m): m is string => !!m))), 
     [products]
   );
 
@@ -55,7 +55,7 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
   );
 
   const availableSizes = useMemo(() => 
-    Array.from(new Set(products.flatMap(p => p.sizes || []))),
+    Array.from(new Set(products.flatMap(p => p.sizes || []).filter((s): s is string => !!s))),
     [products]
   );
 

@@ -27,7 +27,8 @@ export default function SearchBar() {
     const fetchSuggestions = async () => {
       if (query.trim().length > 0) {
         try {
-          const res = await fetch(`http://localhost:5001/api/search?q=${encodeURIComponent(query)}`);
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const res = await fetch(`${apiUrl}/search?q=${encodeURIComponent(query)}`);
           if (res.ok) {
             const { products } = await res.json();
             const transformed = products.map((p: any) => ({ ...p, id: p._id }));

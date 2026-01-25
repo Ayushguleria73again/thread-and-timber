@@ -48,9 +48,10 @@ export default function ProductFormModal({ isOpen, onClose, onSuccess, product }
     setLoading(true);
     
     const token = localStorage.getItem("thread-timber-token");
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const url = product 
-      ? `http://localhost:5001/api/admin/products/${product._id}`
-      : "http://localhost:5001/api/admin/products";
+      ? `${apiUrl}/admin/products/${product._id}`
+      : `${apiUrl}/admin/products`;
     
     const method = product ? "PUT" : "POST";
 

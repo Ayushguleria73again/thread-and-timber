@@ -48,7 +48,8 @@ export default function SettingsPage() {
 
     const token = localStorage.getItem("thread-timber-token");
     try {
-      const res = await fetch("http://localhost:5001/api/auth/profile", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

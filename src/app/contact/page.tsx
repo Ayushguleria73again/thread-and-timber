@@ -17,7 +17,8 @@ export default function ContactPage() {
     e.preventDefault();
     setStatus("loading");
     try {
-      const res = await fetch("http://localhost:5001/api/contact", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

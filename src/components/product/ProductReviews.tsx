@@ -31,7 +31,8 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch(`http://localhost:5001/api/reviews/product/${productId}`);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/reviews/product/${productId}`);
       if (res.ok) {
         const data = await res.json();
         setReviews(data);
@@ -62,9 +63,10 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
     setIsSubmitting(true);
     const token = localStorage.getItem("thread-timber-token");
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     try {
-      const res = await fetch("http://localhost:5001/api/reviews", {
+      const res = await fetch(`${apiUrl}/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,11 +8,6 @@ import {
   useState
 } from "react";
 import {
-  getCurrentUser,
-  getStoredUsers,
-  saveUsers,
-  seedUsersIfNeeded,
-  setCurrentUser,
   type User,
   type Address
 } from "@/lib/auth";

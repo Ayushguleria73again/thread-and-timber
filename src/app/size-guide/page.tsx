@@ -61,7 +61,7 @@ export default function SizeGuidePage() {
                     {Object.entries(chart.measurements).map(([measure, values]) => (
                       <tr key={measure} className="border-b border-black/5">
                         <td className="p-4 text-sm font-medium text-black">{measure}</td>
-                        {values.map((value, i) => (
+                        {values.map((value: number, i: number) => (
                           <td key={i} className="p-4 text-center text-sm text-black/70">
                             {value}
                           </td>
