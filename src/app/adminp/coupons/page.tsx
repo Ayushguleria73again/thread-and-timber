@@ -27,7 +27,8 @@ export default function AdminCouponsPage() {
         });
         if (res.ok) {
           const data = await res.json();
-          setCoupons(data);
+          const safeCoupons = Array.isArray(data) ? data : (data.coupons || []);
+          setCoupons(safeCoupons);
         }
       } catch (error) {
         toast.error("Failed to fetch active coupons");

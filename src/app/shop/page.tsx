@@ -20,11 +20,12 @@ export default function ShopPage() {
         if (res.ok) {
           const data = await res.json();
           // Transform backend _id to frontend id if needed
-          const transformed = data.map((p: any) => ({
+          const rawProducts = Array.isArray(data) ? data : (data.products || []);
+          const transformed = rawProducts.map((p: any) => ({
             ...p,
-            id: p._id,
-            inventory: p.stock,
-            tag: p.isFeatured ? "best seller" : "crafted",
+            id: p._id || p.id,
+            inventory: p.stock ?? p.inventory,
+            tag: p.isFeatured ? "best seller" : (p.tag || "crafted"),
             sizes: p.sizes || ["S", "M", "L", "XL"],
           }));
           setProducts(transformed.length > 0 ? transformed : allProducts);
@@ -48,19 +49,19 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen bg-sand">
-      {loading ? (
+      <Suspense fallback={
         <div className="flex h-screen items-center justify-center">
-            <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Loading collection...</p>
+          <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Refining studio view...</p>
         </div>
-      ) : (
-        <Suspense fallback={
+      }>
+        {loading ? (
           <div className="flex h-screen items-center justify-center">
-            <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Refining studio view...</p>
+              <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Loading collection...</p>
           </div>
-        }>
+        ) : (
           <ShopClient products={products} categories={categories} />
-        </Suspense>
-      )}
+        )}
+      </Suspense>
       <Footer />
     </div>
   );

@@ -24,11 +24,12 @@ export default function AdminDashboard() {
         
         if (ordersRes.ok) {
           const ordersData = await ordersRes.json();
-          setRecentOrders(ordersData.slice(0, 5));
+          const safeOrders = Array.isArray(ordersData) ? ordersData : (ordersData.orders || []);
+          setRecentOrders(safeOrders.slice(0, 5));
         }
         if (metricsRes.ok) {
           const metricsData = await metricsRes.json();
-          setMetrics(metricsData);
+          setMetrics(metricsData || { revenue: 0, aov: 0, activeOrders: 0, totalMakers: 0 });
         }
       } catch (error) {
         console.error("Failed to fetch dashboard pulse");

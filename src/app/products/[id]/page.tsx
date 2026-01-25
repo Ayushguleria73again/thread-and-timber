@@ -38,13 +38,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         // Fetch recommendations (just all products for now)
         const recRes = await fetch(`${apiUrl}/products`);
         if (recRes.ok) {
-          const allData = await recRes.json();
-          setRecommendations(allData
+          const data = await recRes.json();
+          const rawProducts = Array.isArray(data) ? data : (data.products || []);
+          setRecommendations(rawProducts
             .map((p: any) => ({
               ...p,
-              id: p._id,
-              inventory: p.stock,
-              tag: p.isFeatured ? "best seller" : "crafted",
+              id: p._id || p.id,
+              inventory: p.stock ?? p.inventory,
+              tag: p.isFeatured ? "best seller" : (p.tag || "crafted"),
               sizes: p.sizes || ["S", "M", "L", "XL"]
             }))
             .filter((p: any) => p.id !== params.id)

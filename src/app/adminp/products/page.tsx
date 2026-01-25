@@ -19,7 +19,8 @@ export default function AdminProductsPage() {
       const res = await fetch(`${apiUrl}/products`);
       if (res.ok) {
         const data = await res.json();
-        setProducts(data);
+        const rawProducts = Array.isArray(data) ? data : (data.products || []);
+        setProducts(rawProducts);
       }
     } catch (error) {
       toast.error("Failed to fetch collections");

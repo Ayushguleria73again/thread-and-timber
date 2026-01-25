@@ -70,11 +70,12 @@ export default function Home() {
         const res = await fetch(`${apiUrl}/products`);
         if (res.ok) {
           const data = await res.json();
-          const transformed = data.map((p: any) => ({
+          const rawProducts = Array.isArray(data) ? data : (data.products || []);
+          const transformed = rawProducts.map((p: any) => ({
             ...p,
-            id: p._id,
-            inventory: p.stock,
-            tag: p.isFeatured ? "best seller" : "crafted",
+            id: p._id || p.id,
+            inventory: p.stock ?? p.inventory,
+            tag: p.isFeatured ? "best seller" : (p.tag || "crafted"),
             sizes: p.sizes || ["S", "M", "L", "XL"],
           }));
           setProducts(transformed);

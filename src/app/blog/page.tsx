@@ -10,7 +10,8 @@ async function getPosts() {
         next: { revalidate: 3600 }
     });
     if (!res.ok) return [];
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.posts || []);
   } catch (error) {
     console.error("Failed to fetch posts:", error);
     return [];

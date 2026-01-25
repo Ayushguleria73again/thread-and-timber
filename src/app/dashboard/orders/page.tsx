@@ -26,7 +26,8 @@ export default function OrdersPage() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setOrders(data);
+                const safeOrders = Array.isArray(data) ? data : (data.orders || []);
+                setOrders(safeOrders);
             }
         } catch (error) {
             toast.error("Failed to load order history");

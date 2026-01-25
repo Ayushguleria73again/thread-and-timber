@@ -23,7 +23,8 @@ export default function AdminOrdersPage() {
         });
         if (res.ok) {
           const data = await res.json();
-          setOrders(data);
+          const safeOrders = Array.isArray(data) ? data : (data.orders || []);
+          setOrders(safeOrders);
         }
       } catch (error) {
         toast.error("Failed to fetch studio orders");
