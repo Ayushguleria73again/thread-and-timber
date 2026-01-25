@@ -9,7 +9,10 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
         ...options.headers,
     };
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, options);
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+        ...options,
+        headers,
+    });
 
     if (!response.ok) {
         const error = await response.json().catch(() => ({ message: "Unknown error" }));

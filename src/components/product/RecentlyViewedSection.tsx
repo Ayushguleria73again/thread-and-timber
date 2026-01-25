@@ -17,7 +17,7 @@ export default function RecentlyViewedSection() {
         subtitle="Pick up where you left off."
       />
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((product, index) => (
+        {items.map((product: any, index: number) => (
           <ProductCard key={product.id} product={product} index={index} />
         ))}
       </div>

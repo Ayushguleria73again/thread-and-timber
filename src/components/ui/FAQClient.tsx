@@ -79,11 +79,11 @@ export default function FAQClient() {
 
   return (
     <div className="mt-10 space-y-6">
-      {faqs.map((section, sectionIndex) => (
+      {faqs.map((section: any, sectionIndex: number) => (
         <div key={section.category} className="rounded-3xl border border-black/5 bg-white/70 p-6">
           <h3 className="mb-4 text-lg font-semibold text-black">{section.category}</h3>
           <div className="space-y-3">
-            {section.questions.map((faq, qIndex) => {
+            {section.questions.map((faq: any, qIndex: number) => {
               const index = sectionIndex * 100 + qIndex;
               const isOpen = openIndex === index;
               return (

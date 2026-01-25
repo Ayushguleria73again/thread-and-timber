@@ -148,7 +148,7 @@ export default function Home() {
                 </Link>
               </div>
               <div className="grid gap-6 pt-4 sm:grid-cols-3">
-                {stats.map((stat) => (
+                {stats.map((stat: any) => (
                   <div
                     key={stat.label}
                     className="rounded-2xl border border-black/5 bg-white/60 px-5 py-4"

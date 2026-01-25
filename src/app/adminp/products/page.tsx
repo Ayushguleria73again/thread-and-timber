@@ -80,7 +80,7 @@ export default function AdminProductsPage() {
             Array(8).fill(0).map((_, i) => (
                 <div key={i} className="h-64 rounded-3xl bg-white/50 animate-pulse border border-black/5" />
             ))
-        ) : products.map((product) => (
+        ) : products.map((product: any) => (
           <div key={product._id} className="group relative overflow-hidden rounded-3xl border border-black/5 bg-white shadow-soft transition-hover hover:border-black/10">
             <div className="relative h-48 w-full overflow-hidden bg-sand/50">
               <Image 

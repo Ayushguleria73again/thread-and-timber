@@ -36,7 +36,7 @@ export default function TestimonialsSection() {
         subtitle="Real stories from makers who love our handcrafted pieces."
       />
       <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {testimonials.map((testimonial, index) => (
+        {testimonials.map((testimonial: any, index: number) => (
           <motion.div
             key={testimonial.id}
             initial={{ opacity: 0, y: 20 }}

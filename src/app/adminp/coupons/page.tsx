@@ -164,7 +164,7 @@ export default function AdminCouponsPage() {
             Array(3).fill(0).map((_, i) => (
                 <div key={i} className="h-40 rounded-3xl bg-white/50 animate-pulse border border-black/5" />
             ))
-        ) : coupons.map((coupon) => (
+        ) : coupons.map((coupon: any) => (
           <div key={coupon._id} className="group relative overflow-hidden rounded-3xl border border-black/5 bg-white p-6 shadow-soft transition-hover hover:border-black/10">
             <div className="flex items-start justify-between">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sand text-black/60 shadow-inner group-hover:bg-moss group-hover:text-sand transition-colors">

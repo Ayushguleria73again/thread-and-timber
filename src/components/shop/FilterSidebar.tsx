@@ -146,7 +146,7 @@ export default function FilterSidebar({
                     </button>
                     {expandedSection === "material" && (
                       <div className="mt-4 flex flex-wrap gap-2">
-                        {availableMaterials.map((mat) => (
+                        {availableMaterials.map((mat: string) => (
                           <button
                             key={mat}
                             onClick={() => updateFilter("materials", mat)}
@@ -181,7 +181,7 @@ export default function FilterSidebar({
                     </button>
                     {expandedSection === "color" && (
                       <div className="mt-4 flex flex-wrap gap-3">
-                        {availableColors.map((color) => (
+                        {availableColors.map((color: string) => (
                           <button
                             key={color}
                             onClick={() => updateFilter("colors", color)}
@@ -225,7 +225,7 @@ export default function FilterSidebar({
                     </button>
                     {expandedSection === "size" && (
                       <div className="mt-4 flex flex-wrap gap-2">
-                        {availableSizes.map((size) => (
+                        {availableSizes.map((size: string) => (
                           <button
                             key={size}
                             onClick={() => updateFilter("sizes", size)}

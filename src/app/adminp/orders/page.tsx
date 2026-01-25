@@ -117,7 +117,7 @@ export default function AdminOrdersPage() {
                 <tr>
                     <td colSpan={6} className="px-6 py-12 text-center text-xs text-black/20 italic">No orders found matching criteria</td>
                 </tr>
-            ) : filteredOrders.map((order) => (
+            ) : filteredOrders.map((order: any) => (
               <tr key={order._id} className="text-xs transition-hover hover:bg-black/[0.01]">
                 <td className="px-6 py-5">
                     <span className="font-serif italic text-black/40">#{order._id.slice(-6).toUpperCase()}</span>

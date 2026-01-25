@@ -48,7 +48,7 @@ export default function SearchPage() {
         />
         {results.length > 0 ? (
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {results.map((product, index) => (
+            {results.map((product: any, index: number) => (
               <ProductCard key={product.id} product={product} index={index} />
             ))}
           </div>
