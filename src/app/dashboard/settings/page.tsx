@@ -35,7 +35,7 @@ export default function SettingsPage() {
     accessibility: { reducedMotion: false, largeText: false },
     privacy: { publicWishlist: false },
     sustainability: { showImpact: true },
-    localization: { currency: "USD", language: "en" }
+    localization: { currency: "INR", language: "en" }
   };
 
   const prefs = user.preferences || defaultPreferences;
@@ -62,6 +62,29 @@ export default function SettingsPage() {
         toast.success("Profile updated successfully");
       } else {
         toast.error("Failed to update profile");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const token = localStorage.getItem("thread-timber-token");
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/auth/profile`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        toast.success("Account deleted. We hope to see you again.");
+        logout();
+        router.push("/");
+      } else {
+        toast.error("Failed to delete account");
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -167,13 +190,28 @@ export default function SettingsPage() {
               />
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 space-y-4">
               <button
                 onClick={logout}
-                className="w-full rounded-full border border-red-200 bg-red-50 py-3 text-xs uppercase tracking-[0.3em] text-red-600 transition-colors hover:bg-red-100"
+                className="w-full rounded-full border border-black/5 bg-white py-3 text-xs uppercase tracking-[0.3em] text-black transition-colors hover:bg-black hover:text-sand"
               >
                 Log Out of Account
               </button>
+              
+              <div className="rounded-3xl border border-red-100 bg-red-50/30 p-8">
+                <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-red-500 mb-2">Danger Zone</h4>
+                <p className="text-xs text-black/40 mb-6 leading-relaxed">Closing your account will remove your artisan profile, wishlist, and saved addresses permanently. Historic order records will be maintained for dispatch registries.</p>
+                <button
+                    onClick={() => {
+                        if (confirm("Are you certain you wish to permanently delete your studio account? This action is irreversible.")) {
+                            handleDeleteAccount();
+                        }
+                    }}
+                    className="w-full rounded-full border border-red-200 bg-red-50 py-3 text-[10px] uppercase tracking-[0.3em] text-red-600 font-bold transition-all hover:bg-red-600 hover:text-white"
+                >
+                    Delete Studio Account
+                </button>
+              </div>
             </div>
           </div>
         </div>
