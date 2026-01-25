@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { toast } from "sonner";
+import { downloadInvoice } from "@/lib/invoice";
 
 export default function OrdersPage() {
   const { user } = useAuth();
@@ -140,7 +141,7 @@ export default function OrdersPage() {
                                 <div className="mt-6 flex justify-end border-t border-black/5 pt-4">
                                     <button 
                                         className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-moss hover:text-black transition-colors"
-                                        onClick={() => toast.success("Invoice requested sent to email")}
+                                        onClick={() => downloadInvoice(order)}
                                     >
                                         Download Invoice <FiChevronRight />
                                     </button>
