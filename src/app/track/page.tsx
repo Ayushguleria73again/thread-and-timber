@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { FiSearch, FiPackage, FiTruck, FiCheck, FiClock } from "react-icons/fi";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { formatCurrency } from "@/lib/utils";
 
-export default function TrackOrderPage() {
+function TrackOrderContent() {
   const searchParams = useSearchParams();
   const [orderId, setOrderId] = useState("");
   const [order, setOrder] = useState<any>(null);
@@ -18,7 +18,6 @@ export default function TrackOrderPage() {
     const id = searchParams.get("id");
     if (id) {
       setOrderId(id);
-      // Auto-track if ID is provided
       handleTrackWithId(id);
     }
   }, [searchParams]);
@@ -162,5 +161,17 @@ export default function TrackOrderPage() {
       </section>
       <Footer />
     </div>
+  );
+}
+
+export default function TrackOrderPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-sand flex items-center justify-center">
+        <p className="text-xs uppercase tracking-widest text-black/40 animate-pulse">Loading tracking interface...</p>
+      </div>
+    }>
+      <TrackOrderContent />
+    </Suspense>
   );
 }
