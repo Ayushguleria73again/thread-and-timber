@@ -107,16 +107,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               Materials
             </p>
             <p className="text-base text-black/70">{product.materials || "Natural Fibers"}</p>
-            <div className="flex flex-wrap gap-2">
-              {(product.sizes || ["S", "M", "L", "XL"]).map((size: string) => (
-                <span
-                  key={size}
-                  className="rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black/70"
-                >
-                  {size}
-                </span>
-              ))}
-            </div>
             <div className="flex items-center gap-4">
               <span className="text-2xl font-serif italic font-medium text-black">
                 {formatCurrency(product.price)}
