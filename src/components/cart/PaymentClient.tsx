@@ -33,19 +33,14 @@ export default function PaymentClient() {
   // Address selection
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/auth/login?redirect=/payment");
-      return;
-    }
-    if (items.length === 0) {
-      router.push("/cart");
-    }
-  }, [user, items.length, router]);
-
-  if (!user || items.length === 0) {
-    return null;
-  }
+  const applyAddress = (addr: any) => {
+    setStreet(addr.street || addr.address);
+    setCity(addr.city);
+    setStateProv(addr.state);
+    setZip(addr.zip);
+    setCountry(addr.country || "India");
+    setSelectedAddressId(addr.id || addr._id);
+  };
 
   useEffect(() => {
     if (user?.addresses && (user.addresses || []).length > 0) {
@@ -57,18 +52,6 @@ export default function PaymentClient() {
     }
   }, [user]);
 
-  const applyAddress = (addr: any) => {
-    setStreet(addr.street || addr.address);
-    setCity(addr.city);
-    setStateProv(addr.state);
-    setZip(addr.zip);
-    setCountry(addr.country || "India");
-    setSelectedAddressId(addr.id || addr._id);
-  };
-
-  const shipping = 8;
-  const tax = subtotal * 0.08;
-  
   const discountAmount = useMemo(() => {
     if (!couponData) return 0;
     
@@ -76,10 +59,6 @@ export default function PaymentClient() {
     const applicableSubtotal = couponData.applicableCategory && couponData.applicableCategory !== "All"
       ? (items || [])
           .filter(item => {
-            // We need to know the category here. 
-            // In the current CartItem type, we don't have category.
-            // I should have added it. I'll fix CartProvider next.
-            // For now, I'll assume it's there.
             return (item as any).category === couponData.applicableCategory;
           })
           .reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -92,6 +71,26 @@ export default function PaymentClient() {
       : Math.min(couponData.value, applicableSubtotal);
   }, [couponData, items, subtotal]);
 
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login?redirect=/payment");
+      return;
+    }
+    if (items.length === 0) {
+      router.push("/cart");
+    }
+  }, [user, items.length, router]);
+
+  if (!user || items.length === 0) {
+    return (
+        <div className="flex h-64 items-center justify-center bg-sand/50 rounded-3xl animate-pulse">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-black/20">Syncing studio checkout...</p>
+        </div>
+    );
+  }
+
+  const shipping = 8;
+  const tax = subtotal * 0.08;
   const total = Math.max(0, subtotal + shipping + tax - discountAmount);
 
   const handleApplyCoupon = async () => {
@@ -122,9 +121,46 @@ export default function PaymentClient() {
     }
   };
 
+  // Card formatting helpers
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 16) value = value.slice(0, 16);
+    const formatted = value.match(/.{1,4}/g)?.join(" ") || value;
+    setCardNumber(formatted);
+  };
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 4) value = value.slice(0, 4);
+    if (value.length > 2) {
+      value = value.slice(0, 2) + " / " + value.slice(2);
+    }
+    setExpiry(value);
+  };
+
+  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 4) value = value.slice(0, 4);
+    setCvc(value);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!user) return;
+
+    // Basic validity check
+    if (cardNumber.replace(/\s/g, "").length < 16) {
+        toast.error("Please enter a valid card number");
+        return;
+    }
+    if (expiry.length < 7) {
+        toast.error("Please enter a valid expiry date");
+        return;
+    }
+    if (cvc.length < 3) {
+        toast.error("Please enter a valid security code");
+        return;
+    }
 
     const token = localStorage.getItem("thread-timber-token");
     const orderData = {
@@ -175,46 +211,84 @@ export default function PaymentClient() {
 
   return (
     <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-      <form onSubmit={handleSubmit} className="rounded-3xl border border-black/5 bg-white/70 p-6">
-        <h3 className="text-lg font-semibold text-black">Payment Information</h3>
-        <div className="mt-4 space-y-4">
-          <input
-            type="text"
-            placeholder="Cardholder name"
-            value={cardName}
-            onChange={(e) => setCardName(e.target.value)}
-            required
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
-          />
-          <input
-            type="text"
-            placeholder="Card number"
-            value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)}
-            required
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
-          />
-          <div className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={handleSubmit} className="rounded-[2.5rem] border border-black/5 bg-white/70 p-8 lg:p-10 shadow-soft">
+        <div className="flex items-center gap-3 mb-8">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black text-sand">
+                <FiCreditCard className="text-xl" />
+            </div>
+            <div>
+                <h3 className="text-lg font-serif italic text-black leading-tight">Secure Payment</h3>
+                <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Encrypted Studio Transaction</p>
+            </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="group">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 mb-2 block ml-1">Cardholder Identity</label>
             <input
               type="text"
-              placeholder="MM / YY"
-              value={expiry}
-              onChange={(e) => setExpiry(e.target.value)}
+              placeholder="Name on card"
+              value={cardName}
+              onChange={(e) => setCardName(e.target.value)}
               required
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+              autoComplete="cc-name"
+              className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-sm text-black outline-none focus:border-moss transition-colors"
             />
-            <input
-              type="text"
-              placeholder="CVC"
-              value={cvc}
-              onChange={(e) => setCvc(e.target.value)}
-              required
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
-            />
+          </div>
+
+          <div className="group">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 mb-2 block ml-1">Card Details</label>
+            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white divide-y divide-black/10 focus-within:border-moss transition-colors">
+                <div className="relative">
+                    <input
+                      type="tel"
+                      placeholder="0000 0000 0000 0000"
+                      value={cardNumber}
+                      onChange={handleCardNumberChange}
+                      required
+                      autoComplete="cc-number"
+                      inputMode="numeric"
+                      className="w-full bg-transparent px-5 py-5 text-base tracking-[0.2em] text-black outline-none placeholder:text-black/10"
+                    />
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 flex gap-2">
+                        <div className="h-6 w-10 rounded bg-black/5" />
+                        <div className="h-6 w-10 rounded bg-black/5" />
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 divide-x divide-black/10">
+                    <input
+                      type="tel"
+                      placeholder="MM / YY"
+                      value={expiry}
+                      onChange={handleExpiryChange}
+                      required
+                      autoComplete="cc-exp"
+                      inputMode="numeric"
+                      className="w-full bg-transparent px-5 py-5 text-sm tracking-widest text-black outline-none placeholder:text-black/10"
+                    />
+                    <div className="relative">
+                        <input
+                          type="tel"
+                          placeholder="CVC"
+                          value={cvc}
+                          onChange={handleCvcChange}
+                          required
+                          autoComplete="cc-csc"
+                          inputMode="numeric"
+                          className="w-full bg-transparent px-5 py-5 text-sm tracking-widest text-black outline-none placeholder:text-black/10"
+                        />
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2">
+                            <FiCreditCard className="text-black/10" />
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
 
-        <h3 className="mt-10 text-lg font-semibold text-black">Shipping Address</h3>
+        <h3 className="mt-12 text-lg font-serif italic text-black flex items-center gap-2">
+            <span className="h-1 w-8 bg-moss/20 rounded-full" /> Dispatch Selection
+        </h3>
         
         {user?.addresses && (user.addresses || []).length > 0 && (
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -254,7 +328,7 @@ export default function PaymentClient() {
             value={street}
             onChange={(e) => setStreet(e.target.value)}
             required
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm focus:border-moss outline-none transition-colors text-black"
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <input
@@ -263,7 +337,7 @@ export default function PaymentClient() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               required
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm focus:border-moss outline-none transition-colors text-black"
             />
             <input
               type="text"
@@ -271,7 +345,7 @@ export default function PaymentClient() {
               value={stateProv}
               onChange={(e) => setStateProv(e.target.value)}
               required
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm focus:border-moss outline-none transition-colors text-black"
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -281,12 +355,12 @@ export default function PaymentClient() {
               value={zip}
               onChange={(e) => setZip(e.target.value)}
               required
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm focus:border-moss outline-none transition-colors text-black"
             />
             <select
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+              className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm focus:border-moss outline-none transition-colors text-black"
             >
               <option value="IN">India</option>
               <option value="US">United States</option>
@@ -300,27 +374,28 @@ export default function PaymentClient() {
 
         <button
           type="submit"
-          className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-4 text-xs uppercase tracking-[0.3em] text-sand shadow-lg shadow-black/10 hover:bg-black/90 active:scale-95 transition"
+          className="mt-10 flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-sand shadow-xl shadow-black/20 hover:bg-black/90 active:scale-95 transition-all duration-300"
         >
-          <FiCreditCard /> Complete Purchase — {formatCurrency(total)}
+          <FiCreditCard /> Complete Artisan Acquisition — {formatCurrency(total)}
         </button>
-        <div className="mt-10 border-t border-black/5 pt-10">
-          <h3 className="text-lg font-semibold text-black italic font-serif">Exclusive Drop Code</h3>
-          <p className="mt-2 text-[10px] uppercase tracking-widest text-black/40">Enter a studio referral or drop code for artisan discounts.</p>
-          <div className="mt-4 flex gap-2">
+
+        <div className="mt-12 border-t border-black/5 pt-10">
+          <h3 className="text-lg font-serif italic text-black leading-tight">Exclusive Drop Code</h3>
+          <p className="mt-2 text-[10px] uppercase tracking-widest text-black/40 font-bold">Inscribe your studio referral for artisan discounts.</p>
+          <div className="mt-6 flex gap-3">
             <input
               type="text"
               placeholder="e.g. STUDIO10"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
               disabled={!!couponData}
-              className="flex-1 rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm focus:border-black/30 outline-none uppercase tracking-widest disabled:bg-black/5"
+              className="flex-1 rounded-2xl border border-black/10 bg-white px-5 py-4 text-sm focus:border-moss outline-none uppercase tracking-widest disabled:bg-black/5 text-black"
             />
             {couponData ? (
               <button
                 type="button"
                 onClick={() => { setCouponData(null); setCouponCode(""); }}
-                className="rounded-full border border-black/10 px-6 py-3 text-[10px] uppercase tracking-widest text-red-500 hover:bg-red-50"
+                className="rounded-2xl border border-black/10 px-8 py-4 text-[10px] uppercase tracking-widest text-red-500 hover:bg-red-50 font-bold transition-colors"
               >
                 Remove
               </button>
@@ -329,43 +404,46 @@ export default function PaymentClient() {
                 type="button"
                 onClick={handleApplyCoupon}
                 disabled={isApplyingCoupon || !couponCode}
-                className="rounded-full bg-moss px-6 py-3 text-[10px] uppercase tracking-widest text-sand disabled:bg-moss/40"
+                className="rounded-2xl bg-moss px-10 py-4 text-[10px] uppercase tracking-widest text-sand font-bold disabled:bg-moss/40 shadow-lg shadow-moss/10 hover:shadow-moss/20 transition-all active:scale-95"
               >
-                {isApplyingCoupon ? "..." : "Apply"}
+                {isApplyingCoupon ? "..." : "Apply Code"}
               </button>
             )}
           </div>
         </div>
       </form>
 
-      <div className="rounded-3xl border border-black/5 bg-white/60 p-6 self-start">
-        <p className="text-xs uppercase tracking-[0.3em] text-moss">Order summary</p>
-        <div className="mt-6 space-y-3 text-sm text-black/70">
+      <div className="rounded-[2rem] border border-black/5 bg-white/60 p-8 self-start sticky top-24 shadow-soft">
+        <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-moss mb-6">Artisan Summary</p>
+        <div className="space-y-4 text-sm text-black/70">
           <div className="flex justify-between">
-            <span>Items ({items.length})</span>
-            <span>{formatCurrency(subtotal)}</span>
+            <span>Handcrafted Pieces ({items.length})</span>
+            <span className="font-medium text-black">{formatCurrency(subtotal)}</span>
           </div>
           <div className="flex justify-between">
-            <span>Shipping</span>
-            <span>{formatCurrency(shipping)}</span>
+            <span>Studio Courier</span>
+            <span className="font-medium text-black">{formatCurrency(shipping)}</span>
           </div>
           <div className="flex justify-between">
-            <span>Tax</span>
-            <span>{formatCurrency(tax)}</span>
+            <span>Craft Levies</span>
+            <span className="font-medium text-black">{formatCurrency(tax)}</span>
           </div>
           {discountAmount > 0 && (
-            <div className="flex justify-between text-moss">
-              <span>Discount</span>
+            <div className="flex justify-between text-moss font-medium">
+              <span>Studio Discount</span>
               <span>-{formatCurrency(discountAmount)}</span>
             </div>
           )}
-          <div className="flex justify-between text-base font-semibold text-black">
-            <span>Total</span>
-            <span>{formatCurrency(total)}</span>
+          <div className="pt-4 border-t border-black/5 flex justify-between text-lg font-serif italic text-black">
+            <span>Total Acquisition</span>
+            <span className="font-sans font-bold not-italic">{formatCurrency(total)}</span>
           </div>
         </div>
-        <p className="mt-6 text-xs uppercase tracking-[0.3em] text-moss">Need help?</p>
-        <p className="mt-2 text-sm text-black/70">Reach our studio team at studio@threadtimber.co</p>
+        
+        <div className="mt-8 p-4 rounded-2xl bg-sand/40 border border-black/5">
+            <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 mb-2">Need Assistance?</p>
+            <p className="text-xs text-black/70 leading-relaxed">Reach our studio team at <span className="font-bold underline">studio@threadtimber.co</span> for bespoke order queries.</p>
+        </div>
       </div>
     </div>
   );

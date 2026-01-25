@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { FiShare2, FiHeart } from "react-icons/fi";
+import { FiShare2, FiHeart, FiEdit2 } from "react-icons/fi";
 import { useRecentlyViewed } from "@/components/product/RecentlyViewedProvider";
 import { useWishlist } from "@/components/auth/WishlistProvider";
+import { useAuth } from "@/components/auth/AuthProvider";
 import type { Product } from "@/lib/products";
+import Link from "next/link";
 
 type ProductPageClientProps = {
   product: Product;
@@ -13,6 +15,7 @@ type ProductPageClientProps = {
 export default function ProductPageClient({ product }: ProductPageClientProps) {
   const { addProduct } = useRecentlyViewed();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     addProduct(product);
@@ -50,6 +53,15 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       >
         <FiShare2 /> Share
       </button>
+
+      {isAdmin && (
+        <Link
+          href="/adminp/products"
+          className="flex items-center gap-2 rounded-full border border-moss/20 bg-moss/5 px-4 py-2 text-xs uppercase tracking-[0.24em] text-moss hover:bg-moss/10 transition-colors"
+        >
+          <FiEdit2 /> Admin Edit
+        </Link>
+      )}
     </div>
   );
 }

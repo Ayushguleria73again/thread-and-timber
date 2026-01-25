@@ -209,7 +209,7 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                       <div className="flex gap-2">
                           <button 
                             onClick={() => startEdit(address)}
                             className="p-2 rounded-xl bg-white border border-black/5 text-black/40 hover:text-black hover:border-black/10 shadow-sm transition-all"

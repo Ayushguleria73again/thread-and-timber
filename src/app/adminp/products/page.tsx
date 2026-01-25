@@ -98,13 +98,13 @@ export default function AdminProductsPage() {
               <div className="absolute top-3 right-3 flex gap-1">
                 <button 
                   onClick={() => { setEditingProduct(product); setIsModalOpen(true); }}
-                  className="p-2 rounded-xl bg-white/90 backdrop-blur-md text-black/60 hover:text-black hover:bg-white shadow-sm transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
+                  className="p-2 rounded-xl bg-white/90 backdrop-blur-md text-black/60 hover:text-black hover:bg-white shadow-sm transition-all"
                 >
                   <FiEdit2 size={14} />
                 </button>
                 <button 
                   onClick={() => deleteProduct(product._id)}
-                  className="p-2 rounded-xl bg-white/90 backdrop-blur-md text-red-400 hover:text-red-500 hover:bg-white shadow-sm transition-all delay-75 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
+                  className="p-2 rounded-xl bg-white/90 backdrop-blur-md text-red-400 hover:text-red-500 hover:bg-white shadow-sm transition-all"
                 >
                   <FiTrash2 size={14} />
                 </button>
