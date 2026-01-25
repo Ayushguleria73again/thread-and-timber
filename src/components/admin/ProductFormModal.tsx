@@ -156,9 +156,9 @@ export default function ProductFormModal({ isOpen, onClose, onSuccess, product }
             </div>
 
             <div>
-              <label className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-2 block">Price ($)</label>
+              <label className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-2 block">Price (Rs.)</label>
               <div className="relative">
-                <FiDollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20" />
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 text-sm">₹</span>
                 <input 
                   required
                   type="number"

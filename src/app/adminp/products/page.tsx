@@ -113,7 +113,7 @@ export default function AdminProductsPage() {
             <div className="p-5">
               <div className="flex items-center justify-between gap-1 mb-2">
                  <h3 className="text-xs font-bold text-black truncate">{product.name}</h3>
-                 <p className="text-xs font-bold text-moss">${product.price}</p>
+                 <p className="text-xs font-bold text-moss">Rs.{product.price}</p>
               </div>
               <div className="flex items-center gap-4 text-[10px] uppercase tracking-widest text-black/40">
                 <span className="flex items-center gap-1 font-bold">
