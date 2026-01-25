@@ -12,6 +12,9 @@ import ProductDetailClient from "@/components/product/ProductDetailClient";
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductPageClient from "@/components/product/ProductPageClient";
 
+import Link from "next/link";
+import { FiArrowLeft } from "react-icons/fi";
+
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [recommendations, setRecommendations] = useState<Product[]>([]);
@@ -76,7 +79,15 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+        <div className="max-w-6xl mx-auto">
+          <Link 
+            href="/shop" 
+            className="group mb-8 flex w-fit items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
+          >
+            <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
+            Back to Drop
+          </Link>
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div className="relative h-[420px] overflow-hidden rounded-3xl border border-black/5 bg-white/70 sm:h-[520px]">
             <Image
               src={product.image}
@@ -119,6 +130,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </div>
         </div>
         <ProductReviews productId={product.id} />
+        </div>
       </section>
 
       {recommendations.length > 0 && (
