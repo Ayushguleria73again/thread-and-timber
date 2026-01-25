@@ -85,7 +85,7 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  const recentOrders = (orders || []).slice(0, 3);
+  const recentOrders = (orders || []).slice(0, 5);
 
   const stats = [
     {
