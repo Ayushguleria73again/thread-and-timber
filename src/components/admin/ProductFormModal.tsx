@@ -161,10 +161,15 @@ export default function ProductFormModal({ isOpen, onClose, onSuccess, product }
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 text-sm">₹</span>
                 <input 
                   required
-                  type="number"
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0"
                   className="w-full rounded-2xl border border-black/5 bg-sand/30 pl-10 pr-4 py-3 text-sm focus:border-black/10 outline-none"
                   value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9.]/g, '');
+                    setFormData({ ...formData, price: value ? parseFloat(value) : 0 });
+                  }}
                 />
               </div>
             </div>
@@ -175,10 +180,15 @@ export default function ProductFormModal({ isOpen, onClose, onSuccess, product }
                 <FiLayers className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20" />
                 <input 
                   required
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0"
                   className="w-full rounded-2xl border border-black/5 bg-sand/30 pl-10 pr-4 py-3 text-sm focus:border-black/10 outline-none"
                   value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    setFormData({ ...formData, stock: value ? parseInt(value) : 0 });
+                  }}
                 />
               </div>
             </div>
