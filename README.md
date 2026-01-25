@@ -1,22 +1,23 @@
 # Thread & Timber - Artisan Storefront
 
-The premium frontend for Thread & Timber, crafted with Next.js, Tailwind CSS, and Framer Motion.
+The premium frontend for Thread & Timber, crafted with Next.js, Tailwind CSS, and Framer Motion. This foyer serves as the digital entrance to a high-fidelity artisan ecosystem.
 
 ## The Artisan Experience
-A high-fidelity shopping experience designed for slow fashion:
-- **Responsive Design**: Mobile-optimized category sliders and navigation
-- **Dynamic Shop**: Filterable collections with real-time stock status
-- **Secure Checkout**: Integrated payment flow with coupon validation
-- **User Dashboard**: Manage profiles, addresses, and view order history
-- **Interactive details**: Premium typography, micro-animations, and smooth transitions
+A high-fidelity shopping experience designed for slow fashion and mindful acquisitions:
+- **Artisan Dashboard**: A cinematic, glassmorphic portal for managing studio profiles and tracking handcrafted collections.
+- **Virtual Studio Wallet**: Seamlessly redeem artisan tokens and utilize store credit for bespoke acquisitions.
+- **Automated Registry Dispatch**: Secure, beautifully-styled email notifications for every order and gift card transmission.
+- **Responsive Craftsmanship**: Mobile-optimized category sliders and navigation that scale elegantly across all viewports.
+- **Cinematic Motion**: Orchestrated entry animations and micro-interactions powered by Framer Motion.
+- **Premium Typography**: Himalayan-inspired serif branding and meticulous layout design.
 
 ## Tech Stack
 - **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS (Glassmorphism & Custom Palettes)
 - **Animations**: Framer Motion
-- **Icons**: React Icons (Feather)
-- **State Management**: React Context (Auth, Cart, Wishlist)
-- **Notifications**: Sonner
+- **Icons**: React Icons (Feather & Artisan symbols)
+- **State Management**: React Context (Auth, Cart, Wishlist, Wallet Sync)
+- **Notifications**: Sonner (High-contrast toasts)
 
 ## Getting Started
 
@@ -46,8 +47,10 @@ A high-fidelity shopping experience designed for slow fashion:
   Visit [http://localhost:3000](http://localhost:3000)
 
 ## Key Features
-- **Category Sliders**: Horizontal scrolling collections on mobile
-- **Floating Navigation**: Smart nav that appears on scroll
-- **Artisan Reviews**: Glowing star ratings and community feedback
-- **Admin Panel**: `/adminp` for inventory and sales management
-- **SEO Optimized**: Structured data and semantic markup
+- **Artisan Dashboard**: `/dashboard` - A premium home base for mindful makers.
+- **Virtual Wallet**: Integrated redemption and checkout balance usage.
+- **Category Sliders**: High-fidelity horizontal scrolling on mobile galleries.
+- **Floating Navigation**: Context-aware nav that intelligently appears based on artisan flow.
+- **Artisan Reviews**: Glowing star ratings and community-driven acquisition feedback.
+- **Admin Panel**: `/adminp` - Elite inventory and sales registry management.
+- **SEO Optimized**: High-fidelity structured data and semantically crafted markup.
