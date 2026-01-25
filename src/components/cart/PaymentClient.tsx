@@ -233,32 +233,34 @@ export default function PaymentClient() {
         </div>
 
         <div className="space-y-6">
-          <div className="group">
+          <div className={`group transition-opacity duration-300 ${total === 0 && useWallet ? "opacity-40" : ""}`}>
             <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 mb-2 block ml-1">Cardholder Identity</label>
             <input
               type="text"
               placeholder="Name on card"
               value={cardName}
               onChange={(e) => setCardName(e.target.value)}
-              required
+              required={total > 0}
+              disabled={total === 0 && useWallet}
               autoComplete="cc-name"
-              className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-sm text-black outline-none focus:border-moss transition-colors"
+              className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-sm text-black outline-none focus:border-moss transition-colors disabled:cursor-not-allowed"
             />
           </div>
 
-          <div className="group">
+          <div className={`group transition-opacity duration-300 ${total === 0 && useWallet ? "opacity-40" : ""}`}>
             <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 mb-2 block ml-1">Card Details</label>
-            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white divide-y divide-black/10 focus-within:border-moss transition-colors">
+            <div className={`overflow-hidden rounded-2xl border border-black/10 bg-white divide-y divide-black/10 focus-within:border-moss transition-colors ${total === 0 && useWallet ? "bg-black/5" : ""}`}>
                 <div className="relative">
                     <input
                       type="tel"
                       placeholder="0000 0000 0000 0000"
                       value={cardNumber}
                       onChange={handleCardNumberChange}
-                      required
+                      required={total > 0}
+                      disabled={total === 0 && useWallet}
                       autoComplete="cc-number"
                       inputMode="numeric"
-                      className="w-full bg-transparent px-5 py-5 text-base tracking-[0.2em] text-black outline-none placeholder:text-black/10"
+                      className="w-full bg-transparent px-5 py-5 text-base tracking-[0.2em] text-black outline-none placeholder:text-black/10 disabled:cursor-not-allowed"
                     />
                     <div className="absolute right-5 top-1/2 -translate-y-1/2 flex gap-2">
                         <div className="h-6 w-10 rounded bg-black/5" />
@@ -271,10 +273,11 @@ export default function PaymentClient() {
                       placeholder="MM / YY"
                       value={expiry}
                       onChange={handleExpiryChange}
-                      required
+                      required={total > 0}
+                      disabled={total === 0 && useWallet}
                       autoComplete="cc-exp"
                       inputMode="numeric"
-                      className="w-full bg-transparent px-5 py-5 text-sm tracking-widest text-black outline-none placeholder:text-black/10"
+                      className="w-full bg-transparent px-5 py-5 text-sm tracking-widest text-black outline-none placeholder:text-black/10 disabled:cursor-not-allowed"
                     />
                     <div className="relative">
                         <input
@@ -282,10 +285,11 @@ export default function PaymentClient() {
                           placeholder="CVC"
                           value={cvc}
                           onChange={handleCvcChange}
-                          required
+                          required={total > 0}
+                          disabled={total === 0 && useWallet}
                           autoComplete="cc-csc"
                           inputMode="numeric"
-                          className="w-full bg-transparent px-5 py-5 text-sm tracking-widest text-black outline-none placeholder:text-black/10"
+                          className="w-full bg-transparent px-5 py-5 text-sm tracking-widest text-black outline-none placeholder:text-black/10 disabled:cursor-not-allowed"
                         />
                         <div className="absolute right-5 top-1/2 -translate-y-1/2">
                             <FiCreditCard className="text-black/10" />
