@@ -7,10 +7,24 @@ interface OrderDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   order: any;
+  onStatusUpdate?: (id: string, status: string) => void;
 }
 
-export default function OrderDetailsModal({ isOpen, onClose, order }: OrderDetailsModalProps) {
+const ORDER_STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+
+export default function OrderDetailsModal({ isOpen, onClose, order, onStatusUpdate }: OrderDetailsModalProps) {
   if (!isOpen || !order) return null;
+
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'processing': return 'bg-clay/20 text-ink';
+      case 'shipped': return 'bg-moss/10 text-moss';
+      case 'delivered': return 'bg-moss text-sand';
+      case 'cancelled': return 'bg-red-50 text-red-500';
+      case 'pending': return 'bg-black/5 text-black/40';
+      default: return 'bg-black/5 text-black/40';
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -28,11 +42,22 @@ export default function OrderDetailsModal({ isOpen, onClose, order }: OrderDetai
         <div className="max-h-[70vh] overflow-y-auto p-8 space-y-8">
             {/* Status & Date */}
             <div className="grid gap-6 sm:grid-cols-2">
-                <div className="rounded-2xl bg-sand/50 p-4">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-2 flex items-center gap-2"><FiClock /> Current Status</p>
-                    <span className="inline-block rounded-full bg-moss/10 px-3 py-1 text-[10px] uppercase tracking-widest font-bold text-moss">
-                        {order.status}
-                    </span>
+                <div className="rounded-2xl bg-sand/50 p-5">
+                    <p className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-3 flex items-center gap-2"><FiClock /> Studio Status</p>
+                    <div className="relative inline-block">
+                        <select 
+                            value={order.status}
+                            onChange={(e) => onStatusUpdate?.(order._id, e.target.value)}
+                            className={`rounded-full pl-4 pr-10 py-2 text-[10px] uppercase tracking-widest font-bold appearance-none cursor-pointer outline-none ring-1 ring-inset ring-transparent focus:ring-black/10 transition-all ${getStatusStyle(order.status)}`}
+                        >
+                            {ORDER_STATUSES.map(s => (
+                                <option key={s} value={s} className="bg-white text-black font-sans uppercase">{s}</option>
+                            ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-current opacity-40">
+                             <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                    </div>
                 </div>
                 <div className="rounded-2xl bg-sand/50 p-4">
                     <p className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-2 flex items-center gap-2"><FiInfo /> Date Placed</p>

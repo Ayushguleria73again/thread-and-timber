@@ -56,6 +56,8 @@ export default function AdminOrdersPage() {
     }
   };
 
+  const ORDER_STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+
   const filteredOrders = filter === "all" ? orders : orders.filter(o => o.status === filter);
 
   const getStatusStyle = (status: string) => {
@@ -64,6 +66,7 @@ export default function AdminOrdersPage() {
       case 'shipped': return 'bg-moss/10 text-moss';
       case 'delivered': return 'bg-moss text-sand';
       case 'cancelled': return 'bg-red-50 text-red-500';
+      case 'pending': return 'bg-black/5 text-black/40';
       default: return 'bg-black/5 text-black/40';
     }
   };
@@ -83,101 +86,99 @@ export default function AdminOrdersPage() {
                     className="rounded-2xl border border-black/5 bg-white px-10 py-2 text-xs outline-none focus:border-black/10 w-full sm:w-64"
                 />
             </div>
-            <select 
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="rounded-2xl border border-black/5 bg-white px-4 py-2 text-xs outline-none appearance-none pr-8 cursor-pointer"
-            >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="processing">Processing</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-            </select>
+            <div className="relative">
+                <select 
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    className="rounded-2xl border border-black/5 bg-white pl-4 pr-10 py-2 text-xs outline-none appearance-none cursor-pointer text-black"
+                >
+                    <option value="all">All Status</option>
+                    {ORDER_STATUSES.map(s => (
+                        <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                    ))}
+                </select>
+                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-black/20">
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+            </div>
         </div>
       </div>
 
       <div className="rounded-3xl border border-black/5 bg-white overflow-hidden shadow-soft">
-        <table className="w-full text-left">
-          <thead className="border-b border-black/5 bg-black/[0.02]">
-            <tr className="text-[10px] uppercase tracking-widest text-black/40">
-              <th className="px-6 py-4 font-bold">Order ID</th>
-              <th className="px-6 py-4 font-bold">Customer</th>
-              <th className="px-6 py-4 font-bold">Total</th>
-              <th className="px-6 py-4 font-bold">Status</th>
-              <th className="px-6 py-4 font-bold">Date</th>
-              <th className="px-6 py-4 font-bold text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-black/[0.03]">
-            {loading ? (
-                <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-xs text-black/20 animate-pulse">Loading orders...</td>
-                </tr>
-            ) : filteredOrders.length === 0 ? (
-                <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-xs text-black/20 italic">No orders found matching criteria</td>
-                </tr>
-            ) : filteredOrders.map((order: any) => (
-              <tr key={order._id} className="text-xs transition-hover hover:bg-black/[0.01]">
-                <td className="px-6 py-5">
-                    <span className="font-serif italic text-black/40">#{order._id.slice(-6).toUpperCase()}</span>
-                </td>
-                <td className="px-6 py-5 font-medium">{order.shippingAddress.name}</td>
-                <td className="px-6 py-5 font-bold">{formatCurrency(order.total)}</td>
-                <td className="px-6 py-5">
-                  <span className={`rounded-full px-3 py-1 text-[8px] uppercase tracking-widest font-bold ${getStatusStyle(order.status)}`}>
-                    {order.status}
-                  </span>
-                </td>
-                <td className="px-6 py-5 text-black/40">{new Date(order.createdAt).toLocaleDateString()}</td>
-                <td className="px-6 py-5">
-                  <div className="flex justify-end gap-2">
-                    {order.status === 'pending' && (
-                        <button 
-                            onClick={() => updateStatus(order._id, 'processing')}
-                            className="p-2 rounded-xl hover:bg-clay/10 text-ink/60 transition-colors"
-                            title="Process Order"
-                        >
-                            <FiClock />
-                        </button>
-                    )}
-                    {order.status === 'processing' && (
-                        <button 
-                            onClick={() => updateStatus(order._id, 'shipped')}
-                            className="p-2 rounded-xl hover:bg-moss/10 text-moss transition-colors"
-                            title="Ship Order"
-                        >
-                            <FiTruck />
-                        </button>
-                    )}
-                    {order.status === 'shipped' && (
-                        <button 
-                            onClick={() => updateStatus(order._id, 'delivered')}
-                            className="p-2 rounded-xl hover:bg-moss text-sand transition-colors"
-                            title="Deliver Order"
-                        >
-                            <FiCheckCircle />
-                        </button>
-                    )}
-                    <button 
-                      onClick={() => { setSelectedOrder(order); setIsModalOpen(true); }}
-                      className="p-2 rounded-xl hover:bg-black/5 text-black/60 transition-colors"
-                    >
-                      <FiEye />
-                    </button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead className="border-b border-black/5 bg-black/[0.02]">
+              <tr className="text-[10px] uppercase tracking-widest text-black/40 font-bold">
+                <th className="px-6 py-4">Order ID</th>
+                <th className="px-6 py-4">Customer</th>
+                <th className="px-6 py-4">Total</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Date</th>
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-black/[0.03]">
+              {loading ? (
+                  <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-xs text-black/20 animate-pulse font-medium">Syncing studio orders...</td>
+                  </tr>
+              ) : filteredOrders.length === 0 ? (
+                  <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-xs text-black/20 italic font-medium">No orders found matching criteria</td>
+                  </tr>
+              ) : filteredOrders.map((order: any) => (
+                <tr key={order._id} className="text-xs transition-hover hover:bg-black/[0.005] group">
+                  <td className="px-6 py-5">
+                      <span className="font-serif italic text-black/40 group-hover:text-black transition-colors font-medium">#{order._id.slice(-8).toUpperCase()}</span>
+                  </td>
+                  <td className="px-6 py-5">
+                      <p className="font-bold text-black">{order.shippingAddress.name}</p>
+                      <p className="text-[10px] text-black/30 truncate max-w-[120px]">{order.user?.email || 'Guest'}</p>
+                  </td>
+                  <td className="px-6 py-5 font-bold text-black">{formatCurrency(order.total)}</td>
+                  <td className="px-6 py-5">
+                    <div className="relative inline-block">
+                        <select 
+                            value={order.status}
+                            onChange={(e) => updateStatus(order._id, e.target.value)}
+                            className={`rounded-full pl-3 pr-8 py-1.5 text-[8px] uppercase tracking-widest font-bold appearance-none cursor-pointer outline-none ring-1 ring-inset ring-transparent focus:ring-black/10 transition-all ${getStatusStyle(order.status)}`}
+                        >
+                            {ORDER_STATUSES.map(s => (
+                                <option key={s} value={s} className="bg-white text-black font-sans uppercase">{s}</option>
+                            ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-current opacity-40">
+                             <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-black/40 font-medium">{new Date(order.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-5">
+                    <div className="flex justify-end items-center gap-2">
+                      <button 
+                        onClick={() => { setSelectedOrder(order); setIsModalOpen(true); }}
+                        className="p-2.5 rounded-xl bg-black/[0.03] text-black/40 hover:text-black hover:bg-black/[0.06] transition-all"
+                        title="View Details"
+                      >
+                        <FiEye size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <OrderDetailsModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         order={selectedOrder}
+        onStatusUpdate={(id, status) => {
+            updateStatus(id, status);
+            if (selectedOrder) setSelectedOrder({ ...selectedOrder, status });
+        }}
       />
     </div>
   );
