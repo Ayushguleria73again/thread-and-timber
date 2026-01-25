@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiX, FiCheck, FiImage, FiTag, FiLayers, FiDollarSign, FiPlus } from "react-icons/fi";
 import { toast } from "sonner";
 
@@ -13,20 +13,53 @@ interface ProductFormModalProps {
 
 export default function ProductFormModal({ isOpen, onClose, onSuccess, product }: ProductFormModalProps) {
   const [formData, setFormData] = useState({
-    name: product?.name || "",
-    description: product?.description || "",
-    price: product?.price || 0,
-    category: product?.category || "T-Shirts",
-    stock: product?.stock || 10,
-    materials: product?.materials || "Organic Cotton",
-    image: product?.image || "/images/products/placeholder.jpg",
-    isFeatured: product?.isFeatured || false,
-    palette: product?.palette || ["#F6F2EC"],
+    name: "",
+    description: "",
+    price: 0,
+    category: "T-Shirts",
+    stock: 10,
+    materials: "Organic Cotton",
+    image: "/images/products/placeholder.jpg",
+    isFeatured: false,
+    palette: ["#F6F2EC"],
   });
 
   const [loading, setLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState(product?.image || "");
+  const [imagePreview, setImagePreview] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  // Auto-fill form when product changes
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name || "",
+        description: product.description || "",
+        price: product.price || 0,
+        category: product.category || "T-Shirts",
+        stock: product.stock || 10,
+        materials: product.materials || "Organic Cotton",
+        image: product.image || "/images/products/placeholder.jpg",
+        isFeatured: product.isFeatured || false,
+        palette: product.palette || ["#F6F2EC"],
+      });
+      setImagePreview(product.image || "");
+    } else {
+      // Reset form for new product
+      setFormData({
+        name: "",
+        description: "",
+        price: 0,
+        category: "T-Shirts",
+        stock: 10,
+        materials: "Organic Cotton",
+        image: "/images/products/placeholder.jpg",
+        isFeatured: false,
+        palette: ["#F6F2EC"],
+      });
+      setImagePreview("");
+    }
+    setImageFile(null);
+  }, [product]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
