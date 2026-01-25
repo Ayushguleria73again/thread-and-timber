@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -32,7 +34,9 @@ export default function DashboardPage() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setOrders(Array.isArray(data) ? data : []);
+                console.log("Dashboard Orders Data:", data);
+                const safeOrders = Array.isArray(data) ? data : (data.orders || []);
+                setOrders(safeOrders);
             }
         } catch (error) {
             console.error("Dashboard: Failed to load order history");
