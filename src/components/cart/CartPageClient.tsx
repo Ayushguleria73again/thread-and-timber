@@ -117,6 +117,11 @@ export default function CartPageClient() {
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-black">{item.name}</h3>
+                {item.size && (
+                  <p className="text-[10px] uppercase tracking-widest text-moss font-bold mt-1">
+                    Size: {item.size}
+                  </p>
+                )}
                 <p className="text-sm text-black/70">{formatCurrency(item.price)}</p>
               </div>
               <div className="flex items-center gap-3">
