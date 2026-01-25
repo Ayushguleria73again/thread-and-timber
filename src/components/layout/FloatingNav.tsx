@@ -33,6 +33,7 @@ export default function FloatingNav() {
       pathname.startsWith("/dashboard") || 
       pathname.startsWith("/auth") ||
       pathname.startsWith("/checkout") ||
+      pathname.startsWith("/gift-cards") ||
       pathname.startsWith("/cart")) {
     return null;
   }

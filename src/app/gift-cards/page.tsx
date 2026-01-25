@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiGift, FiPlus, FiCreditCard, FiLock, FiEdit2 } from "react-icons/fi";
+import { FiGift, FiPlus, FiCreditCard, FiLock, FiEdit2, FiArrowLeft } from "react-icons/fi";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from "@/components/layout/Footer";
@@ -9,6 +9,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { formatCurrency } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const GIFT_CARD_AMOUNTS = [500, 1000, 2500, 5000, 10000];
 
@@ -94,6 +95,13 @@ export default function GiftCardsPage() {
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12 lg:py-20">
         <div className="max-w-6xl mx-auto">
+          <Link 
+            href="/shop" 
+            className="group mb-8 flex w-fit items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
+          >
+            <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
+            Back to Drop
+          </Link>
           <SectionHeading
             label="Artist Tokens"
             title="The Gift of Handcrafted Choice"
