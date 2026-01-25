@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FiShoppingBag, FiHeart } from "react-icons/fi";
+import { toast } from "sonner";
 import { useCart } from "@/components/cart/CartProvider";
 import { useWishlist } from "@/components/auth/WishlistProvider";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -19,6 +21,26 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const { addItem } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { user } = useAuth();
+  const [selectedSize, setSelectedSize] = useState<string>("");
+
+  // Check if product requires size selection
+  const requiresSize = product.category === "T-Shirts" || product.category === "Jackets" || product.category === "Apparel";
+  const availableSizes = product.sizes || ["S", "M", "L", "XL"];
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (product.inventory === 0) return;
+    
+    if (requiresSize && !selectedSize) {
+      toast.error("Please select a size first");
+      return;
+    }
+    
+    addItem(product, 1, selectedSize || undefined);
+  };
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
@@ -89,27 +111,44 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between z-10">
-        <span className="text-lg font-serif italic font-medium text-black">
-          {formatCurrency(product.price)}
-        </span>
-        <button
-          onClick={(e) => { 
-            if (product.inventory > 0) {
-                e.preventDefault(); 
-                e.stopPropagation(); 
-                addItem(product); 
-            }
-          }}
-          disabled={product.inventory === 0}
-          className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs uppercase tracking-[0.24em] transition-all ${
-            product.inventory === 0 
-                ? "border-black/5 bg-black/5 text-black/20 cursor-not-allowed" 
-                : "border-black/10 bg-white text-black hover:border-black/30"
-          }`}
-        >
-          <FiShoppingBag /> {product.inventory === 0 ? "Unavailable" : "Add to cart"}
-        </button>
+      <div className="flex flex-col gap-3">
+        {requiresSize && product.inventory > 0 && (
+          <div className="flex flex-wrap gap-1.5 z-10">
+            {availableSizes.map((size) => (
+              <button
+                key={size}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedSize(size);
+                }}
+                className={`flex h-7 w-7 items-center justify-center rounded-lg border text-[9px] font-bold transition-all ${
+                  selectedSize === size
+                    ? "border-black bg-black text-sand shadow-sm"
+                    : "border-black/5 bg-white/50 text-black/40 hover:border-black/10"
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center justify-between z-10">
+          <span className="text-lg font-serif italic font-medium text-black">
+            {formatCurrency(product.price)}
+          </span>
+          <button
+            onClick={handleAddToCart}
+            disabled={product.inventory === 0}
+            className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs uppercase tracking-[0.24em] transition-all ${
+              product.inventory === 0 
+                  ? "border-black/5 bg-black/5 text-black/20 cursor-not-allowed" 
+                  : "border-black/10 bg-white text-black hover:border-black/30 shadow-sm"
+            }`}
+          >
+            <FiShoppingBag /> {product.inventory === 0 ? "Unavailable" : "Add"}
+          </button>
+        </div>
       </div>
     </motion.article>
   );
