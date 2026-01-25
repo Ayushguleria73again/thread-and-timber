@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FiPackage, FiTruck, FiCheck, FiClock, FiShoppingBag, FiChevronRight } from "react-icons/fi";
+import { FiPackage, FiTruck, FiCheck, FiClock, FiShoppingBag, FiChevronRight, FiArrowLeft } from "react-icons/fi";
 import { formatCurrency } from "@/lib/utils";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -65,11 +65,19 @@ export default function OrdersPage() {
   return (
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12">
-        <SectionHeading
-          label="Order History"
-          title="Your collection pieces"
-          subtitle="Track your shipments and view past artisan acquisitions."
-        />
+        <div className="max-w-6xl mx-auto">
+          <Link 
+            href="/" 
+            className="group mb-8 flex w-fit items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
+          >
+            <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
+            Back to Studio
+          </Link>
+          <SectionHeading
+            label="Order History"
+            title="Your collection pieces"
+            subtitle="Track your shipments and view past artisan acquisitions."
+          />
 
         <div className="mt-10">
             {loading ? (
@@ -158,7 +166,8 @@ export default function OrdersPage() {
                 </div>
             )}
         </div>
-      </section>
+      </div>
+    </section>
       <Footer />
     </div>
   );

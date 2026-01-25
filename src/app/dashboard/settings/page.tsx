@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FiUser, FiMail, FiLock } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiArrowLeft } from "react-icons/fi";
 import { toast } from "sonner";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -100,11 +101,19 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12">
-        <SectionHeading
-          label="Account Settings"
-          title="Manage your account"
-          subtitle="Tailor your studio experience and preferences."
-        />
+        <div className="max-w-6xl mx-auto">
+          <Link 
+            href="/" 
+            className="group mb-8 flex w-fit items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
+          >
+            <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
+            Back to Studio
+          </Link>
+          <SectionHeading
+            label="Account Settings"
+            title="Manage your account"
+            subtitle="Tailor your studio experience and preferences."
+          />
         
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
           {/* Left Column: Profile & Security */}
@@ -224,6 +233,7 @@ export default function SettingsPage() {
             onConfirm={handleDeleteAccount}
             isLoading={isDeleting}
         />
+        </div>
       </section>
       <Footer />
     </div>

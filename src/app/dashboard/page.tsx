@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FiPackage, FiHeart, FiUser, FiMapPin, FiChevronRight } from "react-icons/fi";
+import { FiPackage, FiHeart, FiUser, FiMapPin, FiChevronRight, FiArrowLeft } from "react-icons/fi";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -77,9 +77,16 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12 lg:py-20">
         <div className="max-w-6xl mx-auto">
+            <Link 
+              href="/" 
+              className="group mb-8 flex w-fit items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
+            >
+              <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
+              Back to Studio
+            </Link>
             <SectionHeading
               label="Artisan Dashboard"
-              title={`Welcome back, ${user.name.split(" ")[0]}`}
+              title={`Welcome , ${user.name.split(" ")[0]}`}
               subtitle="Manage your profile, track collections, and tailor your studio experience."
             />
 

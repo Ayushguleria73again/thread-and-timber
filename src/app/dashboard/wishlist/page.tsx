@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProductCard from "@/components/product/ProductCard";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useWishlist } from "@/components/auth/WishlistProvider";
-import { FiHeart } from "react-icons/fi";
+import { FiHeart, FiArrowLeft } from "react-icons/fi";
 
 export default function WishlistPage() {
   const router = useRouter();
@@ -25,11 +26,19 @@ export default function WishlistPage() {
   return (
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12">
-        <SectionHeading
-          label="Wishlist"
-          title="Saved for later"
-          subtitle="Products you've saved to purchase later."
-        />
+        <div className="max-w-6xl mx-auto">
+          <Link 
+            href="/" 
+            className="group mb-8 flex w-fit items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
+          >
+            <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
+            Back to Studio
+          </Link>
+          <SectionHeading
+            label="Wishlist"
+            title="Saved for later"
+            subtitle="Products you've saved to purchase later."
+          />
         {items.length > 0 ? (
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {(items || []).map((product: any, index: number) => (
@@ -42,6 +51,7 @@ export default function WishlistPage() {
             <p className="text-sm text-black/70">Your wishlist is empty</p>
           </div>
         )}
+        </div>
       </section>
       <Footer />
     </div>
