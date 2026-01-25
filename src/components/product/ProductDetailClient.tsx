@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import ProductCard from "@/components/product/ProductCard";
 import { useCart } from "@/components/cart/CartProvider";
 import type { Product } from "@/lib/products";
@@ -14,11 +15,49 @@ export default function ProductDetailClient({
 }: ProductDetailClientProps) {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState<string>("");
+
+  // Check if product requires size selection
+  const requiresSize = product.category === "T-Shirts" || product.category === "Jackets" || product.category === "Apparel";
+  const availableSizes = product.sizes || ["S", "M", "L", "XL"];
+
+  const handleAddToCart = () => {
+    if (requiresSize && !selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+    addItem(product, quantity, selectedSize || undefined);
+  };
 
   return (
     <div className="flex flex-col gap-4">
       {product.inventory > 0 ? (
         <>
+          {/* Size Selector for Apparel */}
+          {requiresSize && (
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-black/40 font-bold mb-3">
+                Select Size
+              </label>
+              <div className="flex gap-2">
+                {availableSizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 rounded-xl border text-xs uppercase tracking-widest font-bold transition-all ${
+                      selectedSize === size
+                        ? "border-black bg-black text-sand shadow-lg"
+                        : "border-black/10 bg-white text-black/60 hover:border-black/30"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quantity Selector */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
@@ -44,7 +83,7 @@ export default function ProductDetailClient({
             </span>
           </div>
           <button
-            onClick={() => addItem(product, quantity)}
+            onClick={handleAddToCart}
             className="rounded-full bg-black px-6 py-3 text-xs uppercase tracking-[0.3em] text-sand shadow-lg transition-all hover:bg-black/90 active:scale-95"
           >
             Add to cart

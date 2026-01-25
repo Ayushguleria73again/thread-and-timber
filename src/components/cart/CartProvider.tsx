@@ -18,13 +18,14 @@ type CartItem = {
   image: string;
   category: string;
   quantity: number;
+  size?: string; // Optional size for apparel items
 };
 
 type CartContextValue = {
   items: CartItem[];
   itemCount: number;
   subtotal: number;
-  addItem: (product: Product, quantity?: number) => void;
+  addItem: (product: Product, quantity?: number, size?: string) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -56,15 +57,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, isLoaded]);
 
-  const addItem = useCallback((product: Product, quantity = 1) => {
+  const addItem = useCallback((product: Product, quantity = 1, size?: string) => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      // For apparel items, match by both id and size
+      const itemKey = size ? `${product.id}-${size}` : product.id;
+      const existing = prev.find((item) => {
+        const existingKey = item.size ? `${item.id}-${item.size}` : item.id;
+        return existingKey === itemKey;
+      });
+      
       if (existing) {
-        return prev.map((item: CartItem) =>
-          item.id === product.id
+        return prev.map((item: CartItem) => {
+          const existingKey = item.size ? `${item.id}-${item.size}` : item.id;
+          return existingKey === itemKey
             ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+            : item;
+        });
       }
       return [
         ...prev,
@@ -74,11 +82,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           price: product.price,
           image: product.image,
           category: product.category,
-          quantity
+          quantity,
+          size
         }
       ];
     });
-    toast.success(`${product.name} added to bag`);
+    const sizeText = size ? ` (Size: ${size})` : '';
+    toast.success(`${product.name}${sizeText} added to bag`);
   }, []);
 
   const removeItem = useCallback((id: string) => {
