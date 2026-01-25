@@ -23,8 +23,8 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  const orders = user ? getOrdersByUser(user.id) : [];
-  const recentOrders = orders.slice(0, 3);
+  const orders = user ? (getOrdersByUser(user.id) || []) : [];
+  const recentOrders = (orders || []).slice(0, 3);
 
   const stats = [
     {
@@ -57,7 +57,7 @@ export default function DashboardPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {stats.map((stat) => {
+          {(stats || []).map((stat) => {
             const Icon = stat.icon;
             return (
               <Link
@@ -88,9 +88,9 @@ export default function DashboardPage() {
                 View All
               </Link>
             </div>
-            {recentOrders.length > 0 ? (
+            {(recentOrders || []).length > 0 ? (
               <div className="mt-4 space-y-3">
-                {recentOrders.map((order) => (
+                {(recentOrders || []).map((order) => (
                   <Link
                     key={order.id}
                     href={`/orders/${order.id}`}
@@ -98,7 +98,7 @@ export default function DashboardPage() {
                   >
                     <div>
                       <p className="font-medium text-black">
-                        Order #{order.id.slice(-8)}
+                        Order #{order.id?.slice(-8) || 'Unknown'}
                       </p>
                       <p className="text-sm text-black/70">
                         {new Date(order.createdAt).toLocaleDateString()}
@@ -106,7 +106,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-black">
-                        ${order.total.toFixed(2)}
+                        ${(order.total || 0).toFixed(2)}
                       </p>
                       <p className="text-xs uppercase tracking-[0.2em] text-black/60">
                         {order.status}

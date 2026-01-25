@@ -46,7 +46,7 @@ export default function CategorySlider({ category, products }: CategorySliderPro
               msOverflowStyle: "none",
             }}
           >
-            {products.map((product: any, index: number) => (
+          {(products || []).map((product: any, index: number) => (
               <div
                 key={product.id}
                 className="flex-shrink-0 w-[280px] snap-start"

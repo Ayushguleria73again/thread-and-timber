@@ -33,7 +33,7 @@ export default function Navbar() {
             <FiUser /> {user.name.split(" ")[0]} <FiChevronDown />
           </button>
         }
-        items={accountItems.map(item => ({
+        items={(accountItems || []).map(item => ({
           ...item,
           href: item.label === "Log out" ? "" : item.href
         }))}

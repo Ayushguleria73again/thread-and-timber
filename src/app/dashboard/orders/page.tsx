@@ -103,17 +103,17 @@ export default function OrdersPage() {
                                         <FiShoppingBag />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Order #{order._id.slice(-6)}</p>
-                                        <p className="text-xs text-black/60">{new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                        <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Order #{order._id?.slice(-6) || "???"}</p>
+                                        <p className="text-xs text-black/60">{order.createdAt ? new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown date'}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <div className={`flex items-center gap-2 rounded-full border px-4 py-1.5 text-[10px] uppercase tracking-widest font-semibold ${getStatusColor(order.status)}`}>
-                                        {getStatusIcon(order.status)}
-                                        {order.status}
+                                    <div className={`flex items-center gap-2 rounded-full border px-4 py-1.5 text-[10px] uppercase tracking-widest font-semibold ${getStatusColor(order.status || "")}`}>
+                                        {getStatusIcon(order.status || "")}
+                                        {order.status || "Pending"}
                                     </div>
                                     <p className="font-serif italic text-lg font-medium text-black">
-                                        {formatCurrency(order.total)}
+                                        {formatCurrency(order.total || 0)}
                                     </p>
                                 </div>
                             </div>
