@@ -61,7 +61,7 @@ export default function Dropdown({
             }`}
           >
             <div className="py-2">
-              {items.map((item, index) => {
+              {items.map((item: any, index: number) => {
                 const isLink = item.href && !item.href.includes("javascript:");
                 const content = (
                   <>

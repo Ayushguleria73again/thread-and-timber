@@ -71,7 +71,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       </div>
       <div className="flex flex-1 flex-col gap-3">
         <div className="flex items-center gap-3">
-          {(product.palette || []).map((color) => (
+          {(product.palette || []).map((color: string) => (
             <span
               key={`${product.id}-${color}`}
               className="h-6 w-6 rounded-full border border-black/10"

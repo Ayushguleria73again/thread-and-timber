@@ -29,7 +29,7 @@ export function NotificationSettings({ preferences, updatePreferences }: Section
           { id: 'collections', label: 'New Collection Alerts', desc: 'Be the first to hear about seasonal drops.' },
           { id: 'journal', label: 'Journal Updates', desc: 'Studio stories and artisan interviews.' },
           { id: 'restock', label: 'Stock Notifications', desc: 'Alerts for when sold-out items return.' }
-        ].map((item) => (
+        ].map((item: any) => (
           <div key={item.id} className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-black">{item.label}</p>

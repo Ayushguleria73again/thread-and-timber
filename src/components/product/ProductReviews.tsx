@@ -52,7 +52,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
     ? reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length 
     : 0;
 
-  const ratingCounts = [5, 4, 3, 2, 1].map((r) => ({
+  const ratingCounts = [5, 4, 3, 2, 1].map((r: number) => ({
     rating: r,
     count: reviews.filter((rev) => rev.rating === r).length
   }));
@@ -102,7 +102,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               {averageRating.toFixed(1)}
             </span>
             <div className="flex">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map((star: number) => (
                 <FiStar
                   key={star}
                   className={`${
@@ -120,7 +120,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         </div>
 
         <div className="space-y-2">
-          {ratingCounts.map(({ rating: r, count }) => (
+          {ratingCounts.map(({ rating: r, count }: any) => (
             <div key={r} className="flex items-center gap-2">
               <span className="text-[10px] uppercase tracking-widest text-black/40 font-bold w-12">{r} star</span>
               <div className="flex-1 rounded-full bg-black/5 h-1.5 overflow-hidden">
@@ -151,7 +151,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
           <div className="mb-6">
             <label className="mb-3 block text-[10px] uppercase tracking-widest font-bold text-black/40">Rating</label>
             <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map((star: number) => (
                 <motion.button
                   key={star}
                   type="button"
@@ -215,13 +215,13 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 <p className="text-[10px] uppercase tracking-widest text-black/20 italic">No reflections for this piece yet.</p>
                 <p className="mt-1 text-[8px] uppercase tracking-widest text-black/10">Be the first artisan to share your experience.</p>
             </div>
-        ) : reviews.map((review) => (
+        ) : reviews.map((review: any) => (
           <div key={review._id} className="group rounded-3xl border border-black/[0.03] bg-white p-6 transition-hover hover:border-black/10">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-black uppercase tracking-widest">{review.userName}</p>
                 <div className="mt-2 flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
+                  {[1, 2, 3, 4, 5].map((star: number) => (
                     <FiStar
                       key={star}
                       className={`${

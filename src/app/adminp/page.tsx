@@ -62,7 +62,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => (
+        {stats.map((stat: any, index: number) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}

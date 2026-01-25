@@ -102,7 +102,7 @@ export default function CartPageClient() {
     <section className="container-pad py-12">
       <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="flex flex-col gap-4">
-          {items.map((item) => (
+          {items.map((item: any) => (
             <div
               key={item.id}
               className="flex flex-col gap-4 rounded-3xl border border-black/5 bg-white/70 p-5 sm:flex-row sm:items-center"

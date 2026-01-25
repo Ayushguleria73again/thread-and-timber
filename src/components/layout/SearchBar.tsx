@@ -85,7 +85,7 @@ export default function SearchBar() {
       </form>
       {isOpen && suggestions.length > 0 && (
         <div className="absolute top-full z-50 mt-2 w-64 rounded-2xl border border-black/5 bg-white shadow-soft">
-          {suggestions.map((product) => (
+          {suggestions.map((product: any) => (
             <button
               key={product.id}
               onClick={() => handleSuggestionClick(product.id)}

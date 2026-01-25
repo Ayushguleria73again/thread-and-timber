@@ -127,7 +127,7 @@ export default function PaymentClient() {
 
     const token = localStorage.getItem("thread-timber-token");
     const orderData = {
-      items: items.map((item) => ({
+      items: items.map((item: any) => ({
         product: item.id,
         name: item.name,
         price: item.price,

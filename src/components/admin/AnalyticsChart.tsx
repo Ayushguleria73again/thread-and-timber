@@ -80,7 +80,7 @@ export default function AnalyticsChart({ data }: AnalyticsChartProps) {
                 boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
             }}
             itemStyle={{ color: '#4A5D4F', fontSize: '12px', fontWeight: 600 }}
-            formatter={(value: number) => [formatCurrency(value), "Revenue"]}
+            formatter={(value: any) => [formatCurrency(Number(value || 0)), "Revenue"]}
           />
           <Area
             type="monotone"

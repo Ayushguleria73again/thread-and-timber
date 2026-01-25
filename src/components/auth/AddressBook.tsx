@@ -118,7 +118,7 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
           <p className="py-4 text-center text-sm text-black/40 italic">No saved addresses yet.</p>
       ) : (
         <div className="space-y-4">
-          {addresses.map((address) => (
+          {addresses.map((address: any) => (
             <div 
               key={address.id} 
               className={`relative rounded-2xl border p-4 transition-all ${

@@ -107,7 +107,7 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
       <div className="mt-8 space-y-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap gap-3">
-            {["All", ...categories].map((category) => (
+            {["All", ...categories].map((category: string) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
@@ -139,7 +139,7 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
             </button>
             <div className="h-6 w-px bg-black/10 mx-2" />
             <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => (
+              {tags.map((tag: string) => (
                 <button
                   key={tag}
                   onClick={() => setActiveTag(activeTag === tag ? null : tag)}
@@ -173,7 +173,7 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
         </div>
       </div>
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((product, index) => (
+        {filtered.map((product: any, index: number) => (
           <ProductCard key={product.id} product={product} index={index} />
         ))}
       </div>

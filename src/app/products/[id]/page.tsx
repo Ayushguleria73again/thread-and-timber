@@ -96,7 +96,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </p>
             <p className="text-base text-black/70">{product.materials || "Natural Fibers"}</p>
             <div className="flex flex-wrap gap-2">
-              {(product.sizes || ["S", "M", "L", "XL"]).map((size) => (
+              {(product.sizes || ["S", "M", "L", "XL"]).map((size: string) => (
                 <span
                   key={size}
                   className="rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black/70"
@@ -129,7 +129,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           />
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
              {/* Note: In a real app we'd use a real ProductCard here, but for brevity using simple preview logic */}
-             {recommendations.map((item) => (
+             {recommendations.map((item: any) => (
                 <div key={item.id} className="group relative rounded-2xl border border-black/5 bg-white p-4">
                     <div className="relative aspect-square overflow-hidden rounded-xl">
                         <Image src={item.image} alt={item.name} fill className="object-cover transition-transform group-hover:scale-105" />
