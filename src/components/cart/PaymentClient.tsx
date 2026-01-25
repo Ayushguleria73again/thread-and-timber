@@ -13,76 +13,84 @@ export default function PaymentClient() {
   const router = useRouter();
   const { user } = useAuth();
   const { items, subtotal, clearCart } = useCart();
+  
+  // State Hooks (All at the top)
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvc, setCvc] = useState("");
-  
-  // Address fields
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [stateProv, setStateProv] = useState("");
   const [zip, setZip] = useState("");
   const [country, setCountry] = useState("India");
-  
-  // Coupon state
   const [couponCode, setCouponCode] = useState("");
   const [couponData, setCouponData] = useState<any>(null);
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
-  
-  // Address selection
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [useWallet, setUseWallet] = useState(false);
 
+  // Address logic
   const applyAddress = (addr: any) => {
-    setStreet(addr.street || addr.address);
-    setCity(addr.city);
-    setStateProv(addr.state);
-    setZip(addr.zip);
+    setStreet(addr.street || addr.address || "");
+    setCity(addr.city || "");
+    setStateProv(addr.state || "");
+    setZip(addr.zip || "");
     setCountry(addr.country || "India");
     setSelectedAddressId(addr.id || addr._id);
   };
 
+  // 1. Initial Address Load (Only once or when user changes significantly)
   useEffect(() => {
-    if (user?.addresses && (user.addresses || []).length > 0) {
+    if (user?.addresses && (user.addresses || []).length > 0 && !selectedAddressId) {
       const addrList = user.addresses || [];
       const defaultAddr = addrList.find((a: any) => a.isDefault) || addrList[0];
       if (defaultAddr) {
           applyAddress(defaultAddr);
       }
     }
-  }, [user]);
+    if (user && !cardName) {
+        setCardName(user.name);
+    }
+  }, [user, selectedAddressId, cardName]);
 
+  // 2. Redirect Guard
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login?redirect=/payment");
+    } else if (items.length === 0) {
+      router.push("/cart");
+    }
+  }, [user, items.length, router]);
+
+  // Derived Values (Memoized for stability)
   const discountAmount = useMemo(() => {
     if (!couponData) return 0;
-    
-    // Calculate applicable subtotal (only items matching the category)
     const applicableSubtotal = couponData.applicableCategory && couponData.applicableCategory !== "All"
       ? (items || [])
-          .filter(item => {
-            return (item as any).category === couponData.applicableCategory;
-          })
+          .filter(item => (item as any).category === couponData.applicableCategory)
           .reduce((sum, item) => sum + item.price * item.quantity, 0)
       : subtotal;
-
     if (applicableSubtotal === 0) return 0;
-
     return couponData.type === 'percentage' 
       ? applicableSubtotal * (couponData.value / 100) 
       : Math.min(couponData.value, applicableSubtotal);
   }, [couponData, items, subtotal]);
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/auth/login?redirect=/payment");
-      return;
-    }
-    if (items.length === 0) {
-      router.push("/cart");
-    }
-  }, [user, items.length, router]);
+  const shipping = 8;
+  const tax = subtotal * 0.08;
 
-  // Wallet state
-  const [useWallet, setUseWallet] = useState(false);
+  const rawTotal = useMemo(() => {
+      return subtotal + shipping + tax - discountAmount;
+  }, [subtotal, discountAmount, shipping, tax]);
+
+  const walletAmountUsed = useMemo(() => {
+      return useWallet ? Math.min(user?.walletBalance || 0, rawTotal) : 0;
+  }, [useWallet, user?.walletBalance, rawTotal]);
+
+  const total = useMemo(() => {
+      return Math.max(0, rawTotal - walletAmountUsed);
+  }, [rawTotal, walletAmountUsed]);
 
   if (!user || items.length === 0) {
     return (
@@ -91,12 +99,6 @@ export default function PaymentClient() {
         </div>
     );
   }
-
-  const shipping = 8;
-  const tax = subtotal * 0.08;
-  const rawTotal = subtotal + shipping + tax - discountAmount;
-  const walletAmountUsed = useWallet ? Math.min(user?.walletBalance || 0, rawTotal) : 0;
-  const total = Math.max(0, rawTotal - walletAmountUsed);
 
   const handleApplyCoupon = async () => {
     if (!couponCode) return;
