@@ -6,7 +6,9 @@ import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProductCard from "@/components/product/ProductCard";
 
-export default function SearchPage() {
+import { Suspense } from "react";
+
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [results, setResults] = useState<any[]>([]);
@@ -35,28 +37,42 @@ export default function SearchPage() {
   }, [query]);
 
   return (
+    <>
+      <SectionHeading
+        label="Search Results"
+        title={query ? `Results for "${query}"` : "Search Products"}
+        subtitle={
+          results.length > 0
+            ? `Found ${results.length} product${results.length > 1 ? "s" : ""}`
+            : "No products found"
+        }
+      />
+      {results.length > 0 ? (
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {results.map((product: any, index: number) => (
+            <ProductCard key={product.id} product={product} index={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="mt-10 rounded-3xl border border-black/5 bg-white/70 p-12 text-center">
+          <p className="text-sm text-black/70">Try a different search term</p>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function SearchPage() {
+  return (
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12">
-        <SectionHeading
-          label="Search Results"
-          title={query ? `Results for "${query}"` : "Search Products"}
-          subtitle={
-            results.length > 0
-              ? `Found ${results.length} product${results.length > 1 ? "s" : ""}`
-              : "No products found"
-          }
-        />
-        {results.length > 0 ? (
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {results.map((product: any, index: number) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
+        <Suspense fallback={
+          <div className="flex h-64 items-center justify-center">
+            <p className="text-sm uppercase tracking-widest text-black/40 animate-pulse">Searching the studio...</p>
           </div>
-        ) : (
-          <div className="mt-10 rounded-3xl border border-black/5 bg-white/70 p-12 text-center">
-            <p className="text-sm text-black/70">Try a different search term</p>
-          </div>
-        )}
+        }>
+          <SearchContent />
+        </Suspense>
       </section>
       <Footer />
     </div>

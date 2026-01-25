@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer";
 import ShopClient from "@/components/shop/ShopClient";
 import { allProducts, type Product } from "@/lib/products";
 
+import { Suspense } from "react";
+
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -51,7 +53,13 @@ export default function ShopPage() {
             <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Loading collection...</p>
         </div>
       ) : (
-        <ShopClient products={products} categories={categories} />
+        <Suspense fallback={
+          <div className="flex h-screen items-center justify-center">
+            <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Refining studio view...</p>
+          </div>
+        }>
+          <ShopClient products={products} categories={categories} />
+        </Suspense>
       )}
       <Footer />
     </div>
