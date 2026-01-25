@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { FiCreditCard, FiPlus } from "react-icons/fi";
+import { motion } from "framer-motion";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/components/cart/CartProvider";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -389,12 +390,14 @@ export default function PaymentClient() {
           </div>
         </div>
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           type="submit"
-          className="mt-10 flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-sand shadow-xl shadow-black/20 hover:bg-black/90 active:scale-95 transition-all duration-300"
+          className="mt-10 flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-sand shadow-xl shadow-black/20 hover:bg-black/90 transition-all duration-300"
         >
           <FiCreditCard /> Complete Artisan Acquisition — {formatCurrency(total)}
-        </button>
+        </motion.button>
 
         <div className="mt-12 border-t border-black/5 pt-10">
           <h3 className="text-lg font-serif italic text-black leading-tight">Exclusive Drop Code</h3>
