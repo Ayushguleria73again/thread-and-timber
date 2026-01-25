@@ -138,7 +138,13 @@ export default function OrdersPage() {
                                         </div>
                                     ))}
                                 </div>
-                                <div className="mt-6 flex justify-end border-t border-black/5 pt-4">
+                                <div className="mt-6 flex justify-between items-center border-t border-black/5 pt-4">
+                                    <Link 
+                                        href={`/track?id=${order._id}`}
+                                        className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-blue-600 hover:text-black transition-colors"
+                                    >
+                                        <FiPackage /> Track Order
+                                    </Link>
                                     <button 
                                         className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-moss hover:text-black transition-colors"
                                         onClick={() => downloadInvoice(order)}
