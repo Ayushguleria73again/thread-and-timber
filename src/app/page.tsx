@@ -66,7 +66,8 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/products");
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+        const res = await fetch(`${apiUrl}/products`);
         if (res.ok) {
           const data = await res.json();
           const transformed = data.map((p: any) => ({

@@ -13,7 +13,8 @@ export default function ShopPage() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/products");
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+        const res = await fetch(`${apiUrl}/products`);
         if (res.ok) {
           const data = await res.json();
           // Transform backend _id to frontend id if needed
