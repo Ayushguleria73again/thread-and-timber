@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { FiCreditCard } from "react-icons/fi";
+import { FiCreditCard, FiPlus } from "react-icons/fi";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/components/cart/CartProvider";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -89,9 +89,13 @@ export default function PaymentClient() {
     );
   }
 
+  // Wallet state
+  const [useWallet, setUseWallet] = useState(false);
   const shipping = 8;
   const tax = subtotal * 0.08;
-  const total = Math.max(0, subtotal + shipping + tax - discountAmount);
+  const rawTotal = subtotal + shipping + tax - discountAmount;
+  const walletAmountUsed = useWallet ? Math.min(user?.walletBalance || 0, rawTotal) : 0;
+  const total = Math.max(0, rawTotal - walletAmountUsed);
 
   const handleApplyCoupon = async () => {
     if (!couponCode) return;
@@ -144,22 +148,25 @@ export default function PaymentClient() {
     setCvc(value);
   };
 
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!user) return;
 
-    // Basic validity check
-    if (cardNumber.replace(/\s/g, "").length < 16) {
-        toast.error("Please enter a valid card number");
-        return;
-    }
-    if (expiry.length < 7) {
-        toast.error("Please enter a valid expiry date");
-        return;
-    }
-    if (cvc.length < 3) {
-        toast.error("Please enter a valid security code");
-        return;
+    // Basic validity check - Only if payment is still required
+    if (total > 0) {
+        if (cardNumber.replace(/\s/g, "").length < 16) {
+            toast.error("Please enter a valid card number");
+            return;
+        }
+        if (expiry.length < 7) {
+            toast.error("Please enter a valid expiry date");
+            return;
+        }
+        if (cvc.length < 3) {
+            toast.error("Please enter a valid security code");
+            return;
+        }
     }
 
     const token = localStorage.getItem("thread-timber-token");
@@ -172,6 +179,7 @@ export default function PaymentClient() {
         image: item.image
       })),
       total,
+      walletAmountUsed,
       discountAmount,
       couponCode: couponData?.code,
       email: user.email,
@@ -202,7 +210,8 @@ export default function PaymentClient() {
         clearCart();
         router.push(`/orders/${savedOrder._id}`);
       } else {
-        toast.error("Failed to create order. Please try again.");
+        const errorData = await res.json();
+        toast.error(errorData.message || "Failed to create order. Please try again.");
       }
     } catch (error) {
       console.error("Order error:", error);
@@ -435,11 +444,41 @@ export default function PaymentClient() {
               <span>-{formatCurrency(discountAmount)}</span>
             </div>
           )}
+          {walletAmountUsed > 0 && (
+            <div className="flex justify-between text-blue-600 font-medium">
+                <span>Wallet Credit</span>
+                <span>-{formatCurrency(walletAmountUsed)}</span>
+            </div>
+          )}
           <div className="pt-4 border-t border-black/5 flex justify-between text-lg font-serif italic text-black">
             <span>Total Acquisition</span>
             <span className="font-sans font-bold not-italic">{formatCurrency(total)}</span>
           </div>
         </div>
+
+        {user && (user.walletBalance || 0) > 0 && (
+            <div className="mt-8 pt-6 border-t border-black/5">
+                <button
+                    type="button"
+                    onClick={() => setUseWallet(!useWallet)}
+                    className={`flex w-full items-center justify-between rounded-2xl border p-4 transition-all ${
+                        useWallet
+                            ? "border-moss bg-moss/[0.03] ring-1 ring-moss"
+                            : "border-black/10 bg-white hover:border-black/20"
+                    }`}
+                >
+                    <div className="flex items-center gap-3">
+                        <div className={`h-5 w-5 rounded-md border flex items-center justify-center transition-colors ${useWallet ? 'bg-moss border-moss text-sand' : 'border-black/10'}`}>
+                            {useWallet && <FiPlus className="text-xs" />}
+                        </div>
+                        <div className="text-left">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-black">Use Wallet Balance</p>
+                            <p className="text-[8px] text-black/40 uppercase tracking-widest">Available: {formatCurrency(user.walletBalance || 0)}</p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        )}
         
         <div className="mt-8 p-4 rounded-2xl bg-sand/40 border border-black/5">
             <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 mb-2">Need Assistance?</p>

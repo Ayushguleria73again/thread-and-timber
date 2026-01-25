@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FiPackage, FiHeart, FiUser, FiMapPin, FiChevronRight, FiArrowLeft } from "react-icons/fi";
+import { FiPackage, FiHeart, FiUser, FiMapPin, FiChevronRight, FiArrowLeft, FiCreditCard } from "react-icons/fi";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -64,6 +64,12 @@ export default function DashboardPage() {
       value: wishlistItems.length,
       icon: FiHeart,
       href: "/dashboard/wishlist"
+    },
+    {
+      label: "Virtual Wallet",
+      value: formatCurrency(user.walletBalance || 0),
+      icon: FiCreditCard,
+      href: "/gift-cards"
     },
     {
       label: "Saved Addresses",

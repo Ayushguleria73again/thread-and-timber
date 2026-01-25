@@ -41,6 +41,7 @@ export type User = {
   };
   wishlist?: string[];
   isAdmin?: boolean;
+  walletBalance?: number;
 };
 
 const CURRENT_USER_KEY = "thread-timber-current-user";

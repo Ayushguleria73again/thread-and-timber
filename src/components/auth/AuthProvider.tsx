@@ -19,6 +19,7 @@ type AuthContextValue = {
   logout: () => void;
   updatePreferences: (preferences: User["preferences"]) => void;
   updateAddresses: (addresses: Address[]) => void;
+  refreshWalletBalance: () => Promise<void>;
   isAdmin: boolean;
 };
 
@@ -144,6 +145,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const refreshWalletBalance = async () => {
+    const token = localStorage.getItem("thread-timber-token");
+    if (!token || !user) return;
+
+    try {
+      const res = await fetch(`${API_URL}/gift-cards/balance`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const { walletBalance } = await res.json();
+        setUser({ ...user, walletBalance });
+      }
+    } catch (error) {
+      console.error("Refresh wallet balance error:", error);
+    }
+  };
+
   const value = useMemo(
     () => ({
       user,
@@ -152,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       logout,
       updatePreferences,
       updateAddresses,
+      refreshWalletBalance,
       isAdmin: !!user?.isAdmin
     }),
     [user]
