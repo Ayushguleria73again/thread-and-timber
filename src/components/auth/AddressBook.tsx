@@ -14,6 +14,95 @@ const COUNTRIES = [
   "Germany", "France", "Japan", "Singapore", "United Arab Emirates"
 ];
 
+const AddressForm = ({ 
+    formData, 
+    setFormData, 
+    handleSave, 
+    cancelAction, 
+    isEdit = false 
+  }: {
+    formData: Partial<Address>;
+    setFormData: (data: Partial<Address>) => void;
+    handleSave: () => void;
+    cancelAction: () => void;
+    isEdit?: boolean;
+  }) => (
+    <div className="mb-6 rounded-2xl border border-black/10 bg-white p-5 shadow-soft animate-in fade-in slide-in-from-top-2">
+        <h4 className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-4">
+            {isEdit ? "Revising Artisan Address" : "New Collection Destination"}
+        </h4>
+        <div className="grid gap-3">
+            <input 
+                placeholder="Full Name" 
+                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                value={formData.name || ""}
+                onChange={e => setFormData({...formData, name: e.target.value})}
+            />
+            <input 
+                placeholder="Street Address" 
+                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                value={formData.street || ""}
+                onChange={e => setFormData({...formData, street: e.target.value})}
+            />
+            <div className="grid grid-cols-2 gap-3">
+                <input 
+                    placeholder="City" 
+                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                    value={formData.city || ""}
+                    onChange={e => setFormData({...formData, city: e.target.value})}
+                />
+                <input 
+                    placeholder="State / Province" 
+                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                    value={formData.state || ""}
+                    onChange={e => setFormData({...formData, state: e.target.value})}
+                />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+                <input 
+                    placeholder="ZIP / Postal Code" 
+                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                    value={formData.zip || ""}
+                    onChange={e => setFormData({...formData, zip: e.target.value})}
+                />
+                <div className="relative">
+                    <select 
+                        className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss appearance-none cursor-pointer text-black"
+                        value={formData.country || "India"}
+                        onChange={e => setFormData({...formData, country: e.target.value})}
+                    >
+                        {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                </div>
+            </div>
+            <select 
+                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss appearance-none cursor-pointer text-black"
+                value={formData.label || "Home"}
+                onChange={e => setFormData({...formData, label: e.target.value})}
+            >
+                <option value="Home">Home</option>
+                <option value="Work">Work</option>
+                <option value="Studio">Studio</option>
+                <option value="Other">Other</option>
+            </select>
+            <div className="flex gap-3 mt-2">
+                <button 
+                    onClick={cancelAction}
+                    className="flex-1 rounded-xl border border-black/5 py-3 text-[10px] uppercase tracking-widest text-black/40 hover:text-black transition-colors"
+                >
+                    Cancel
+                </button>
+                <button 
+                    onClick={handleSave}
+                    className="flex-[2] rounded-xl bg-black py-3 text-[10px] uppercase tracking-widest text-sand hover:bg-black/90 shadow-lg shadow-black/10 transition-all active:scale-95"
+                >
+                    {isEdit ? "Update Address" : "Save Piece Location"}
+                </button>
+            </div>
+        </div>
+    </div>
+);
+
 export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -68,83 +157,6 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
     setFormData({});
   };
 
-  const AddressForm = ({ isEdit = false }) => (
-    <div className="mb-6 rounded-2xl border border-black/10 bg-white p-5 shadow-soft animate-in fade-in slide-in-from-top-2">
-        <h4 className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-4">
-            {isEdit ? "Revising Artisan Address" : "New Collection Destination"}
-        </h4>
-        <div className="grid gap-3">
-            <input 
-                placeholder="Full Name" 
-                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors"
-                value={formData.name || ""}
-                onChange={e => setFormData({...formData, name: e.target.value})}
-            />
-            <input 
-                placeholder="Street Address" 
-                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors"
-                value={formData.street || ""}
-                onChange={e => setFormData({...formData, street: e.target.value})}
-            />
-            <div className="grid grid-cols-2 gap-3">
-                <input 
-                    placeholder="City" 
-                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors"
-                    value={formData.city || ""}
-                    onChange={e => setFormData({...formData, city: e.target.value})}
-                />
-                <input 
-                    placeholder="State / Province" 
-                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors"
-                    value={formData.state || ""}
-                    onChange={e => setFormData({...formData, state: e.target.value})}
-                />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-                <input 
-                    placeholder="ZIP / Postal Code" 
-                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors"
-                    value={formData.zip || ""}
-                    onChange={e => setFormData({...formData, zip: e.target.value})}
-                />
-                <select 
-                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss appearance-none cursor-pointer"
-                    value={formData.country || "India"}
-                    onChange={e => setFormData({...formData, country: e.target.value})}
-                >
-                    {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-            </div>
-            <div className="grid grid-cols-1 gap-3">
-                <select 
-                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss appearance-none cursor-pointer"
-                    value={formData.label || "Home"}
-                    onChange={e => setFormData({...formData, label: e.target.value})}
-                >
-                    <option value="Home">Home</option>
-                    <option value="Work">Work</option>
-                    <option value="Studio">Studio</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div className="flex gap-3 mt-2">
-                <button 
-                    onClick={cancelAction}
-                    className="flex-1 rounded-xl border border-black/5 py-3 text-[10px] uppercase tracking-widest text-black/40 hover:text-black transition-colors"
-                >
-                    Cancel
-                </button>
-                <button 
-                    onClick={handleSave}
-                    className="flex-[2] rounded-xl bg-black py-3 text-[10px] uppercase tracking-widest text-sand hover:bg-black/90 shadow-lg shadow-black/10 transition-all active:scale-95"
-                >
-                    {isEdit ? "Update Address" : "Save Piece Location"}
-                </button>
-            </div>
-        </div>
-    </div>
-  );
-
   return (
     <div className="rounded-[2.5rem] border border-black/5 bg-white/70 p-8 lg:p-10">
       <div className="mb-8 flex items-center justify-between">
@@ -164,7 +176,7 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
         )}
       </div>
 
-      {isAdding && <AddressForm />}
+      {isAdding && <AddressForm formData={formData} setFormData={setFormData} handleSave={handleSave} cancelAction={cancelAction} />}
 
       {(addresses || []).length === 0 && !isAdding ? (
           <div className="py-12 text-center rounded-3xl border border-dashed border-black/10 bg-sand/20">
@@ -175,7 +187,7 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
           {(addresses || []).map((address: any) => (
             <div key={address.id}>
               {editingId === address.id ? (
-                <AddressForm isEdit />
+                <AddressForm isEdit formData={formData} setFormData={setFormData} handleSave={handleSave} cancelAction={cancelAction} />
               ) : (
                 <div 
                   className={`group relative rounded-3xl border p-6 transition-all duration-300 ${
