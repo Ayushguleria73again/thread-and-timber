@@ -217,7 +217,7 @@ export const downloadInvoice = (order: any) => {
                 <div class="footer">
                     <div class="footer-text">"Handcrafted for mindful makers."</div>
                     <div style="font-size: 9px; color: #8C8C8C; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 12px;">
-                        Thread & Timber Studio • Sonoma, California • threadtimber.co
+                        Thread & Timber Studio • Kangra, Himachal Pradesh • threadtimber.in
                     </div>
                 </div>
             </div>

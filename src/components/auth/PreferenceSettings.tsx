@@ -112,6 +112,7 @@ export function LocalizationSettings({ preferences, updatePreferences }: Section
             onChange={(e) => handleChange('currency', e.target.value)}
             className="w-full rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm"
           >
+            <option value="INR">INR (Rs.)</option>
             <option value="USD">USD ($)</option>
             <option value="EUR">EUR (€)</option>
             <option value="GBP">GBP (£)</option>

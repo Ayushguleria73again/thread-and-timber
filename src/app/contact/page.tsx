@@ -92,12 +92,12 @@ export default function ContactPage() {
               Address
             </p>
             <p className="mt-3 text-sm text-black/70">
-              24 Atelier Lane, Sonoma, CA
+              Kangra, Himachal Pradesh, India
             </p>
             <p className="mt-6 text-xs uppercase tracking-[0.3em] text-moss">
               Email
             </p>
-            <p className="mt-3 text-sm text-black/70">studio@threadtimber.co</p>
+            <p className="mt-3 text-sm text-black/70">studio@threadtimber.in</p>
           </div>
         </div>
       </section>
