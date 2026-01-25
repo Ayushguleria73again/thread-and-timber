@@ -81,6 +81,9 @@ export default function PaymentClient() {
     }
   }, [user, items.length, router]);
 
+  // Wallet state
+  const [useWallet, setUseWallet] = useState(false);
+
   if (!user || items.length === 0) {
     return (
         <div className="flex h-64 items-center justify-center bg-sand/50 rounded-3xl animate-pulse">
@@ -89,8 +92,6 @@ export default function PaymentClient() {
     );
   }
 
-  // Wallet state
-  const [useWallet, setUseWallet] = useState(false);
   const shipping = 8;
   const tax = subtotal * 0.08;
   const rawTotal = subtotal + shipping + tax - discountAmount;
