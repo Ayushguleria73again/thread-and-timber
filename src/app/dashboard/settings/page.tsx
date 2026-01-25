@@ -10,12 +10,15 @@ import { useAuth } from "@/components/auth/AuthProvider";
 
 import { NotificationSettings, AccessibilitySettings, LocalizationSettings, PrivacySettings, SustainabilitySettings } from "@/components/auth/PreferenceSettings";
 import AddressBook from "@/components/auth/AddressBook";
+import DeleteAccountModal from "@/components/auth/DeleteAccountModal";
 
 export default function SettingsPage() {
   const router = useRouter();
   const { user, logout, updatePreferences, updateAddresses } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -70,6 +73,7 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = async () => {
     const token = localStorage.getItem("thread-timber-token");
+    setIsDeleting(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(`${apiUrl}/auth/profile`, {
@@ -85,9 +89,11 @@ export default function SettingsPage() {
         router.push("/");
       } else {
         toast.error("Failed to delete account");
+        setIsDeleting(false);
       }
     } catch (error) {
       toast.error("Something went wrong");
+      setIsDeleting(false);
     }
   };
 
@@ -202,11 +208,7 @@ export default function SettingsPage() {
                 <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-red-500 mb-2">Danger Zone</h4>
                 <p className="text-xs text-black/40 mb-6 leading-relaxed">Closing your account will remove your artisan profile, wishlist, and saved addresses permanently. Historic order records will be maintained for dispatch registries.</p>
                 <button
-                    onClick={() => {
-                        if (confirm("Are you certain you wish to permanently delete your studio account? This action is irreversible.")) {
-                            handleDeleteAccount();
-                        }
-                    }}
+                    onClick={() => setIsDeleteModalOpen(true)}
                     className="w-full rounded-full border border-red-200 bg-red-50 py-3 text-[10px] uppercase tracking-[0.3em] text-red-600 font-bold transition-all hover:bg-red-600 hover:text-white"
                 >
                     Delete Studio Account
@@ -215,6 +217,13 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
+
+        <DeleteAccountModal 
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteAccount}
+            isLoading={isDeleting}
+        />
       </section>
       <Footer />
     </div>

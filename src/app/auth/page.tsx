@@ -1,8 +1,21 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function AuthLandingPage() {
+  const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/dashboard");
+    }
+  }, [user, router]);
   return (
     <div className="min-h-screen bg-sand">
       <section className="container-pad py-12">
