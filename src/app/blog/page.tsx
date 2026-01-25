@@ -4,7 +4,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 
 // Data fetching function
 async function getPosts() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   try {
     const res = await fetch(`${apiUrl}/posts`, {
         next: { revalidate: 3600 }

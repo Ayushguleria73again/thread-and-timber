@@ -15,7 +15,8 @@ export default function AdminProductsPage() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5001/api/products");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/products`);
       if (res.ok) {
         const data = await res.json();
         setProducts(data);
@@ -36,7 +37,8 @@ export default function AdminProductsPage() {
     
     const token = localStorage.getItem("thread-timber-token");
     try {
-      const res = await fetch(`http://localhost:5001/api/admin/products/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/admin/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });

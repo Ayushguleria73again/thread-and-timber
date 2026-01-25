@@ -21,7 +21,8 @@ export default function AdminCouponsPage() {
     const fetchCoupons = async () => {
       const token = localStorage.getItem("thread-timber-token");
       try {
-        const res = await fetch("http://localhost:5001/api/admin/coupons", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
+        const res = await fetch(`${apiUrl}/admin/coupons`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
@@ -41,7 +42,8 @@ export default function AdminCouponsPage() {
     e.preventDefault();
     const token = localStorage.getItem("thread-timber-token");
     try {
-      const res = await fetch("http://localhost:5001/api/admin/coupons", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
+      const res = await fetch(`${apiUrl}/admin/coupons`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -64,7 +66,8 @@ export default function AdminCouponsPage() {
   const deleteCoupon = async (id: string) => {
     const token = localStorage.getItem("thread-timber-token");
     try {
-      const res = await fetch(`http://localhost:5001/api/admin/coupons/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
+      const res = await fetch(`${apiUrl}/admin/coupons/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });

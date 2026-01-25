@@ -33,7 +33,8 @@ export default function OrderConfirmationPage() {
     const fetchOrder = async () => {
       const token = localStorage.getItem("thread-timber-token");
       try {
-        const res = await fetch(`http://localhost:5001/api/orders/${params.id}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const res = await fetch(`${apiUrl}/orders/${params.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {

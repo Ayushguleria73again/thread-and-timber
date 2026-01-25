@@ -10,7 +10,7 @@ type BlogPageProps = {
 
 // Data fetching function
 async function getPost(id: string) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   try {
     const res = await fetch(`${apiUrl}/posts/${id}`, {
       // Revalidate every hour or use 'no-store' for instant updates

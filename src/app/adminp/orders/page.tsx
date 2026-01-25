@@ -17,7 +17,8 @@ export default function AdminOrdersPage() {
     const fetchOrders = async () => {
       const token = localStorage.getItem("thread-timber-token");
       try {
-        const res = await fetch("http://localhost:5001/api/admin/orders", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const res = await fetch(`${apiUrl}/admin/orders`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
@@ -36,7 +37,8 @@ export default function AdminOrdersPage() {
   const updateStatus = async (orderId: string, status: string) => {
     const token = localStorage.getItem("thread-timber-token");
     try {
-      const res = await fetch(`http://localhost:5001/api/admin/orders/${orderId}/status`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/admin/orders/${orderId}/status`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",

@@ -7,21 +7,23 @@ import CTA from "@/components/ui/CTA";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { formatCurrency } from "@/lib/utils";
-import { allProducts, getProductById as getStaticProduct, type Product } from "@/lib/products";
-import ProductDetailClient, {
-  ProductCardPreview
-} from "@/components/product/ProductDetailClient";
+import { type Product, allProducts } from "@/lib/products";
+import ProductDetailClient from "@/components/product/ProductDetailClient";
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductPageClient from "@/components/product/ProductPageClient";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProductData = async () => {
       try {
-        const res = await fetch(`http://localhost:5001/api/products/${params.id}`);
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        
+        // Fetch main product
+        const res = await fetch(`${apiUrl}/products/${params.id}`);
         if (res.ok) {
           const data = await res.json();
           setProduct({
@@ -29,27 +31,39 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             id: data._id,
             inventory: data.stock,
             tag: data.isFeatured ? "best seller" : "crafted",
-            sizes: ["S", "M", "L", "XL"],
+            sizes: data.sizes || ["S", "M", "L", "XL"],
           });
-        } else {
-          // Try static fallback
-          const staticProd = getStaticProduct(params.id);
-          if (staticProd) setProduct(staticProd);
+        }
+
+        // Fetch recommendations (just all products for now)
+        const recRes = await fetch(`${apiUrl}/products`);
+        if (recRes.ok) {
+          const allData = await recRes.json();
+          setRecommendations(allData
+            .map((p: any) => ({
+              ...p,
+              id: p._id,
+              inventory: p.stock,
+              tag: p.isFeatured ? "best seller" : "crafted",
+              sizes: p.sizes || ["S", "M", "L", "XL"]
+            }))
+            .filter((p: any) => p.id !== params.id)
+            .slice(0, 3)
+          );
         }
       } catch (error) {
-        const staticProd = getStaticProduct(params.id);
-        if (staticProd) setProduct(staticProd);
+        console.error("Failed to fetch product data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchProduct();
+    fetchProductData();
   }, [params.id]);
 
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-sand">
-        <p className="text-xs uppercase tracking-widest text-ink/40 animate-pulse">Loading piece...</p>
+        <p className="text-xs uppercase tracking-widest text-black/40 animate-pulse">Loading piece...</p>
       </div>
     );
   }
@@ -68,6 +82,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               alt={product.name}
               fill
               className="object-cover"
+              priority
             />
           </div>
           <div className="flex flex-col gap-6">
@@ -79,9 +94,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             <p className="text-sm uppercase tracking-[0.3em] text-moss">
               Materials
             </p>
-            <p className="text-base text-black/70">{product.materials}</p>
+            <p className="text-base text-black/70">{product.materials || "Natural Fibers"}</p>
             <div className="flex flex-wrap gap-2">
-              {product.sizes.map((size) => (
+              {(product.sizes || ["S", "M", "L", "XL"]).map((size) => (
                 <span
                   key={size}
                   className="rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black/70"
@@ -104,26 +119,32 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
         <ProductReviews productId={product.id} />
       </section>
-      <section className="container-pad pb-12">
-        <SectionHeading
-          label="You might also like"
-          title="More handcrafted favorites"
-          subtitle="Small-batch pieces with natural textures."
-        />
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {allProducts
-            .filter((item) => item.id !== product.id)
-            .slice(0, 3)
-            .map((item, index) => (
-              <div key={item.id} className="h-full">
-                <ProductCardPreview product={item} index={index} />
-              </div>
-            ))}
-        </div>
-      </section>
+
+      {recommendations.length > 0 && (
+        <section className="container-pad pb-20">
+          <SectionHeading
+            label="You might also like"
+            title="More handcrafted favorites"
+            subtitle="Small-batch pieces with natural textures."
+          />
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+             {/* Note: In a real app we'd use a real ProductCard here, but for brevity using simple preview logic */}
+             {recommendations.map((item) => (
+                <div key={item.id} className="group relative rounded-2xl border border-black/5 bg-white p-4">
+                    <div className="relative aspect-square overflow-hidden rounded-xl">
+                        <Image src={item.image} alt={item.name} fill className="object-cover transition-transform group-hover:scale-105" />
+                    </div>
+                    <h4 className="mt-4 font-serif text-lg">{item.name}</h4>
+                    <p className="text-sm text-black/60">{formatCurrency(item.price)}</p>
+                    <a href={`/products/${item.id}`} className="absolute inset-0" />
+                </div>
+             ))}
+          </div>
+        </section>
+      )}
+
       <CTA />
       <Footer />
     </div>
   );
 }
-

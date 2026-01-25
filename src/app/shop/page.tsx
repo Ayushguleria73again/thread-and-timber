@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react";
 import Footer from "@/components/layout/Footer";
 import ShopClient from "@/components/shop/ShopClient";
-import { allProducts, categories as staticCategories, type Product } from "@/lib/products";
+import { allProducts, type Product } from "@/lib/products";
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>(staticCategories);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         const res = await fetch(`${apiUrl}/products`);
         if (res.ok) {
           const data = await res.json();

@@ -16,9 +16,10 @@ export default function AdminDashboard() {
     const fetchDashboard = async () => {
       const token = localStorage.getItem("thread-timber-token");
       try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
         const [ordersRes, metricsRes] = await Promise.all([
-          fetch("http://localhost:5001/api/admin/orders", { headers: { Authorization: `Bearer ${token}` } }),
-          fetch("http://localhost:5001/api/admin/metrics", { headers: { Authorization: `Bearer ${token}` } })
+          fetch(`${apiUrl}/admin/orders`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${apiUrl}/admin/metrics`, { headers: { Authorization: `Bearer ${token}` } })
         ]);
         
         if (ordersRes.ok) {
