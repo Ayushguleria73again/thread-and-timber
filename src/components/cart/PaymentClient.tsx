@@ -174,6 +174,7 @@ export default function PaymentClient() {
       total,
       discountAmount,
       couponCode: couponData?.code,
+      email: user.email,
       shippingAddress: {
         name: cardName || user.name,
         street: street,
