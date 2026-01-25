@@ -48,8 +48,9 @@ export default function PaymentClient() {
   }
 
   useEffect(() => {
-    if (user && user.addresses && user.addresses.length > 0) {
-      const defaultAddr = user.addresses.find(a => a.isDefault) || user.addresses[0];
+    if (user?.addresses && (user.addresses || []).length > 0) {
+      const addrList = user.addresses || [];
+      const defaultAddr = addrList.find((a: any) => a.isDefault) || addrList[0];
       if (defaultAddr) {
           applyAddress(defaultAddr);
       }
@@ -73,7 +74,7 @@ export default function PaymentClient() {
     
     // Calculate applicable subtotal (only items matching the category)
     const applicableSubtotal = couponData.applicableCategory && couponData.applicableCategory !== "All"
-      ? items
+      ? (items || [])
           .filter(item => {
             // We need to know the category here. 
             // In the current CartItem type, we don't have category.
@@ -127,7 +128,7 @@ export default function PaymentClient() {
 
     const token = localStorage.getItem("thread-timber-token");
     const orderData = {
-      items: items.map((item: any) => ({
+      items: (items || []).map((item: any) => ({
         product: item.id,
         name: item.name,
         price: item.price,
@@ -215,9 +216,9 @@ export default function PaymentClient() {
 
         <h3 className="mt-10 text-lg font-semibold text-black">Shipping Address</h3>
         
-        {user.addresses && user.addresses.length > 0 && (
+        {user?.addresses && (user.addresses || []).length > 0 && (
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {user.addresses.map((addr: any) => (
+            {(user.addresses || []).map((addr: any) => (
               <button
                 key={addr.id || addr._id}
                 type="button"
