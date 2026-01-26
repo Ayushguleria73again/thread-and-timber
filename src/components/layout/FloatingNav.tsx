@@ -55,6 +55,7 @@ export default function FloatingNav() {
       >
         <div className="flex items-center gap-1">
           <Dropdown
+            side="top"
             trigger={
               <button className="flex items-center gap-1.5 rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95">
                 Shop <FiChevronDown className="text-xs opacity-20" />
