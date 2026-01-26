@@ -7,6 +7,7 @@ import {
   useMemo,
   useState
 } from "react";
+import { useSession } from "next-auth/react";
 import {
   type User,
   type Address
@@ -30,7 +31,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const { data: session, status } = useSession();
 
+  // 1. Fetch Profile (Legacy/Internal)
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("thread-timber-token");
@@ -52,6 +55,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     fetchProfile();
   }, []);
+
+  // 2. Synchronize Social Session with Artisan Registry
+  useEffect(() => {
+    if (status === "authenticated" && session?.user && !user) {
+        const syncSocial = async () => {
+            const ok = await socialLogin({
+                email: session.user?.email || "",
+                name: session.user?.name || "",
+                provider: (session as any).provider || "social"
+            });
+            if (ok) {
+                console.log("Social identity synchronized with artisan registry.");
+            }
+        };
+        syncSocial();
+    }
+  }, [session, status, user]);
 
   const login = async (email: string, password: string) => {
     try {

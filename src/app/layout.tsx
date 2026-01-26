@@ -7,6 +7,7 @@ import { WishlistProvider } from "@/components/auth/WishlistProvider";
 import { RecentlyViewedProvider } from "@/components/product/RecentlyViewedProvider";
 import Navbar from "@/components/layout/Navbar";
 import FloatingNav from "@/components/layout/FloatingNav";
+import { NextAuthProvider } from "@/components/auth/NextAuthProvider";
 import { Toaster } from "sonner";
 
 const outfit = Outfit({ 
@@ -51,17 +52,19 @@ export default function RootLayout({
             }
           }}
         />
-        <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <RecentlyViewedProvider>
-                <Navbar />
-                <FloatingNav />
-                {children}
-              </RecentlyViewedProvider>
-            </WishlistProvider>
-          </CartProvider>
-        </AuthProvider>
+        <NextAuthProvider>
+          <AuthProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <RecentlyViewedProvider>
+                  <Navbar />
+                  <FloatingNav />
+                  {children}
+                </RecentlyViewedProvider>
+              </WishlistProvider>
+            </CartProvider>
+          </AuthProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -80,13 +81,7 @@ function LoginForm() {
 
       <div className="mt-8 grid grid-cols-1 gap-3">
         <button
-          onClick={async () => {
-            setIsLoading(true);
-            // Simulated Google Login for high-fidelity demonstration
-            const ok = await socialLogin({ email: "artisan@google.com", name: "Artisan Maker", provider: "google" });
-            if (ok) router.push(searchParams.get("redirect") || "/dashboard");
-            setIsLoading(false);
-          }}
+          onClick={() => signIn("google")}
           type="button"
           className="flex items-center justify-center gap-3 rounded-full border border-black/10 bg-white px-6 py-4 text-xs uppercase tracking-widest text-black transition-all hover:border-black/30 hover:shadow-lg active:scale-[0.98]"
         >
@@ -100,12 +95,7 @@ function LoginForm() {
         </button>
 
         <button
-          onClick={async () => {
-            setIsLoading(true);
-            const ok = await socialLogin({ email: "artisan@facebook.com", name: "Artisan Friend", provider: "facebook" });
-            if (ok) router.push(searchParams.get("redirect") || "/dashboard");
-            setIsLoading(false);
-          }}
+          onClick={() => signIn("facebook")}
           type="button"
           className="flex items-center justify-center gap-3 rounded-full bg-[#1877F2] px-6 py-4 text-xs uppercase tracking-widest text-white transition-all hover:bg-[#166fe5] hover:shadow-lg active:scale-[0.98]"
         >
@@ -116,12 +106,7 @@ function LoginForm() {
         </button>
 
         <button
-          onClick={async () => {
-            setIsLoading(true);
-            const ok = await socialLogin({ email: "artisan@apple.com", name: "Artisan User", provider: "apple" });
-            if (ok) router.push(searchParams.get("redirect") || "/dashboard");
-            setIsLoading(false);
-          }}
+          onClick={() => signIn("apple")}
           type="button"
           className="flex items-center justify-center gap-3 rounded-full bg-black px-6 py-4 text-xs uppercase tracking-widest text-white transition-all hover:shadow-lg active:scale-[0.98]"
         >
