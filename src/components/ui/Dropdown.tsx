@@ -72,10 +72,13 @@ export default function Dropdown({
             className={`absolute z-50 w-56 rounded-[1.5rem] border border-black/5 bg-white/90 backdrop-blur-2xl shadow-massive outline-none ${
               align === "right" ? "right-0" : "left-0"
             } ${
-              side === "bottom" ? "top-full mt-3" : "bottom-full mb-3"
+              side === "bottom" ? "top-full mt-2 pt-2" : "bottom-full mb-2 pb-2"
             } origin-${side === "bottom" ? "top" : "bottom"}-${align}`}
           >
-            <div className="p-2">
+            {/* Hover Bridge (Invisible connector) */}
+            <div className={`absolute left-0 right-0 h-4 ${side === 'bottom' ? '-top-4' : '-bottom-4'}`} />
+            
+            <div className="p-2 relative z-10">
               {(items || []).map((item: any, index: number) => {
                 const isLink = item.href && !item.href.includes("javascript:");
                 const content = (
