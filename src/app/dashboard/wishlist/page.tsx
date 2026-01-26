@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import SectionHeading from "@/components/ui/SectionHeading";
-import ProductCard from "@/components/product/ProductCard";
+import CategorySlider from "@/components/product/CategorySlider";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useWishlist } from "@/components/auth/WishlistProvider";
 import { FiHeart, FiArrowLeft } from "react-icons/fi";
+import type { Product } from "@/lib/products";
 
 export default function WishlistPage() {
   const router = useRouter();
@@ -39,13 +40,24 @@ export default function WishlistPage() {
             title="Saved for later"
             subtitle="Products you've saved to purchase later."
           />
-        {items.length > 0 ? (
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {(items || []).map((product: any, index: number) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
-        ) : (
+        
+          {items.length > 0 ? (
+            <div className="mt-10 space-y-4">
+              {Object.entries(
+                items.reduce((acc: any, product: Product) => {
+                  if (!acc[product.category]) acc[product.category] = [];
+                  acc[product.category].push(product);
+                  return acc;
+                }, {})
+              ).map(([category, products]: [string, any]) => (
+                <CategorySlider 
+                  key={category} 
+                  category={category} 
+                  products={products} 
+                />
+              ))}
+            </div>
+          ) : (
           <div className="mt-10 rounded-3xl border border-black/5 bg-white/70 p-12 text-center">
             <FiHeart className="mx-auto mb-4 text-4xl text-black/30" />
             <p className="text-sm text-black/70">Your wishlist is empty</p>
