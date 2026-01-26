@@ -105,95 +105,127 @@ export default function Home() {
       />
       <div className="min-h-screen bg-sand">
       <main>
-        <section className="container-pad py-14 md:py-20">
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-            <div className="flex flex-col gap-6">
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-xs uppercase tracking-[0.3em] text-moss"
-              >
-                Handcrafted apparel studio
-              </motion.p>
-              <motion.h1
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl font-semibold text-black sm:text-5xl"
-              >
-                Minimal pieces for slow wardrobes and mindful makers.
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65 }}
-                className="max-w-xl text-base text-black/70 sm:text-lg"
-              >
-                We craft tees, jackets, and accessories using natural fibers and
-                vintage-inspired dye techniques. Each drop is made in small
-                batches by a dedicated studio team.
-              </motion.p>
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <Link
-                  href="/shop"
-                  className="rounded-full bg-black px-6 py-3 text-xs uppercase tracking-[0.3em] text-sand"
-                >
-                  Shop the drop
-                </Link>
-                <Link
-                  href="/about"
-                  className="rounded-full border border-black/10 px-6 py-3 text-xs uppercase tracking-[0.3em] text-black"
-                >
-                  Our process
-                </Link>
-              </div>
-              <div className="grid gap-6 pt-4 sm:grid-cols-3">
-                {stats.map((stat: any) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-2xl border border-black/5 bg-white/60 px-5 py-4"
-                  >
-                    <p className="text-xs uppercase tracking-[0.28em] text-moss">
-                      {stat.label}
-                    </p>
-                    <p className="mt-3 text-2xl font-semibold text-black">
-                      {stat.value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Cinematic Hero Section */}
+        <section className="relative overflow-hidden bg-[#FAF8F6] pt-24 pb-16 lg:pt-32 lg:pb-24">
+          {/* Ambient Texture/Glow */}
+          <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-moss/5 blur-[120px]" />
+          <div className="pointer-events-none absolute top-1/2 -right-24 h-96 w-96 -translate-y-1/2 rounded-full bg-clay/10 blur-[120px]" />
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="rounded-3xl border border-black/5 bg-white/70 p-6 shadow-soft"
-            >
-              <div className="grid gap-4">
-                <div className="rounded-3xl bg-clay/70 p-6">
-                  <p className="text-xs uppercase tracking-[0.3em] text-moss">
-                    Craft journal
-                  </p>
-                  <h3 className="mt-3 text-2xl font-semibold text-black">
-                    From loom to label
-                  </h3>
-                  <p className="mt-3 text-sm text-black/70">
-                    See the texture, stitching, and hand-finished details in
-                    our studio.
-                  </p>
-                </div>
-                <div className="rounded-3xl border border-dashed border-black/10 p-6">
-                  <p className="text-xs uppercase tracking-[0.3em] text-moss">
-                    Studio updates
-                  </p>
-                  <p className="mt-3 text-sm text-black/70">
-                    Small runs. Natural dyes. Slow craft. Delivered monthly.
-                  </p>
+          <div className="container-pad relative">
+            <div className="grid gap-16 lg:grid-cols-[1fr_0.8fr] lg:items-start">
+              <div className="flex flex-col">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <span className="inline-block rounded-full border border-moss/10 bg-moss/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] font-bold text-moss mb-8">
+                    Artisan Registry № 021
+                  </span>
+                  
+                  <h1 className="font-serif text-5xl font-light italic leading-[1.1] text-black sm:text-7xl lg:text-8xl">
+                    <motion.span 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2, duration: 1 }}
+                      className="block"
+                    >
+                      Mindful 
+                    </motion.span>
+                    <motion.span 
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4, duration: 1 }}
+                      className="block pl-12 sm:pl-24"
+                    >
+                      Textures.
+                    </motion.span>
+                  </h1>
+                </motion.div>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                  className="mt-10 max-w-lg text-lg leading-relaxed text-black/60 font-medium"
+                >
+                  Handcrafted apparel studio specializing in sustainable, small-batch collections made with natural fibers and vintage-inspired dye techniques.
+                </motion.p>
+
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                  className="mt-12 flex flex-col gap-5 sm:flex-row"
+                >
+                  <Link
+                    href="/shop"
+                    className="flex items-center justify-center rounded-full bg-black px-10 py-5 text-[10px] uppercase tracking-[0.4em] font-bold text-sand shadow-xl shadow-black/10 hover:bg-black/90 hover:shadow-2xl transition-all active:scale-95"
+                  >
+                    Explore Drop
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="flex items-center justify-center rounded-full border border-black/10 bg-white/40 px-10 py-5 text-[10px] uppercase tracking-[0.4em] font-bold text-black backdrop-blur-sm hover:bg-white hover:border-black/30 transition-all active:scale-95"
+                  >
+                    Our Process
+                  </Link>
+                </motion.div>
+
+                <div className="mt-20 grid grid-cols-3 gap-8 border-t border-black/5 pt-12">
+                  {stats.map((stat: any, idx: number) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1 + (idx * 0.1), duration: 0.8 }}
+                      className="group cursor-default"
+                    >
+                      <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/30 transition-colors group-hover:text-moss">
+                        {stat.label}
+                      </p>
+                      <p className="mt-2 text-3xl font-serif italic text-black font-light group-hover:translate-x-1 transition-transform">
+                        {stat.value}
+                      </p>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
-            </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98, rotate: -1 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ delay: 0.4, duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                className="relative hidden lg:block"
+              >
+                <div className="aspect-[4/5] w-full overflow-hidden rounded-[4rem] border border-black/5 bg-white shadow-massive">
+                    <img 
+                      src="https://images.unsplash.com/photo-1556905055-8f358a7a4bb4?q=80&w=2670&auto=format&fit=crop" 
+                      alt="Artisan Studio Preview" 
+                      className="h-full w-full object-cover transition-transform duration-[3s] hover:scale-105"
+                    />
+                    <div className="absolute inset-x-8 bottom-8 rounded-3xl bg-white/20 p-8 shadow-soft backdrop-blur-2xl border border-white/20">
+                        <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/50">Journal № 04</p>
+                        <h3 className="mt-3 font-serif text-2xl italic text-white leading-tight">From loom to label — a story of texture.</h3>
+                        <Link href="/about" className="mt-6 flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] font-bold text-white hover:gap-5 transition-all">
+                            Read Registry <span className="h-px w-8 bg-white/30" />
+                        </Link>
+                    </div>
+                </div>
+                
+                {/* Secondary Floating Card */}
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.2, duration: 1 }}
+                  className="absolute -bottom-10 -left-20 w-64 rounded-[2rem] border border-black/5 bg-sand p-6 shadow-2xl backdrop-blur-xl border-white/50"
+                >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-moss/10 text-moss mb-4 font-bold text-xs italic font-serif">T&T</div>
+                    <p className="text-xs font-semibold text-black leading-relaxed">Small runs. Natural dyes. Slow craft.</p>
+                    <p className="mt-2 text-[10px] text-black/40 italic">Delivered monthly to our registry members.</p>
+                </motion.div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
