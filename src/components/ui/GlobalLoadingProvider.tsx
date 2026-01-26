@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 
@@ -10,35 +10,37 @@ type GlobalLoadingContextType = {
 
 const GlobalLoadingContext = createContext<GlobalLoadingContextType | undefined>(undefined);
 
+// Internal component to handle route-sensitive dismissal safely with Suspense
+function RouteDismissalManager({ setIsLoading, pathname }: { setIsLoading: (l: boolean) => void, pathname: string }) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (pathname === "/") return;
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, [pathname, searchParams, setIsLoading]);
+
+  return null;
+}
+
 export function GlobalLoadingProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  // Route change detection to prevent hanging
-  useEffect(() => {
-    // If we're on the homepage, let the page component handle it for high-fidelity sync
-    if (pathname === "/") return;
-
-    // For all other pages, provide a cinematic 1.2s reveal then dismiss
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
-
-    return () => clearTimeout(timer);
-  }, [pathname, searchParams]);
-
-  // Safety timer for homepage or any unexpected hang
+  // Safety timer for any unexpected hang (max 5s)
   useEffect(() => {
     const safety = setTimeout(() => {
         setIsLoading(false);
-    }, 5000); // Max 5s safety registry
+    }, 5000);
     return () => clearTimeout(safety);
   }, []);
 
   return (
     <GlobalLoadingContext.Provider value={{ setIsLoading }}>
       <LoadingScreen isLoading={isLoading} />
+      <Suspense fallback={null}>
+        <RouteDismissalManager setIsLoading={setIsLoading} pathname={pathname} />
+      </Suspense>
       {children}
     </GlobalLoadingContext.Provider>
   );
