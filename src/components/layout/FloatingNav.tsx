@@ -40,46 +40,57 @@ export default function FloatingNav() {
   }
 
   return (
-    <div className="fixed top-20 left-0 right-0 z-40 flex justify-center pointer-events-none">
+    <div className="fixed bottom-10 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
       <motion.nav
         variants={{
           visible: { opacity: 1, scale: 1, y: 0 },
-          hidden: { opacity: 0, scale: 0.9, y: -20 },
+          hidden: { opacity: 0, scale: 0.9, y: 40 },
         }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ 
-          duration: 0.5, 
+          duration: 0.8, 
           ease: [0.16, 1, 0.3, 1] 
         }}
-        className="pointer-events-auto flex items-center gap-1 rounded-full border border-black/[0.03] bg-sand/60 px-2 py-2 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
+        className="pointer-events-auto flex items-center p-1.5 rounded-[2rem] border border-white/40 bg-white/40 backdrop-blur-3xl shadow-massive overflow-hidden"
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <Dropdown
             trigger={
-              <button className="flex items-center gap-1 rounded-full px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] text-black/60 transition-all hover:bg-black/[0.03] hover:text-black">
-                Shop <FiChevronDown className="text-[10px] opacity-40" />
+              <button className="flex items-center gap-1.5 rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95">
+                Shop <FiChevronDown className="text-xs opacity-20" />
               </button>
             }
             items={shopItems}
           />
+          
+          <div className="h-4 w-px bg-black/[0.03] mx-1 hidden sm:block" />
+
           <Link 
             href="/blog" 
-            className="rounded-full px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] font-medium text-black/60 transition-all hover:bg-black/[0.03] hover:text-black"
+            className="rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
           >
             Journal
           </Link>
+
           <Link 
             href="/about" 
-            className="rounded-full px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] font-medium text-black/60 transition-all hover:bg-black/[0.03] hover:text-black"
+            className="hidden sm:flex rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
           >
-            About
+            Studio
           </Link>
+
           <Link 
             href="/contact" 
-            className="rounded-full px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] font-medium text-black/60 transition-all hover:bg-black/[0.03] hover:text-black"
+            className="rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
           >
-            Contact
+            Reach
           </Link>
+
+          <div className="h-10 w-10 flex items-center justify-center rounded-full bg-black text-sand ml-1 cursor-pointer hover:rotate-12 transition-transform shadow-lg active:scale-90" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" />
+            </svg>
+          </div>
         </div>
       </motion.nav>
     </div>

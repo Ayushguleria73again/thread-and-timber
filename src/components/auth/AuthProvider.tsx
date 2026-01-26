@@ -7,7 +7,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
   type User,
   type Address
@@ -115,9 +115,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem("thread-timber-token");
     setUser(null);
+    try {
+        await signOut({ redirect: false });
+    } catch (error) {
+        console.error("Social logout error:", error);
+    }
   };
 
   const updatePreferences = async (preferences: User["preferences"]) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { FiUser, FiShoppingBag, FiHeart, FiChevronDown, FiSettings, FiLogOut, FiLayout, FiPackage } from "react-icons/fi";
 import { useCart } from "@/components/cart/CartProvider";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -14,14 +15,13 @@ export default function Navbar() {
   const { items: wishlistItems } = useWishlist();
 
   const accountItems = user ? [
-    { label: "Dashboard", href: "/dashboard", icon: <FiLayout /> },
-    { label: "My Orders", href: "/dashboard/orders", icon: <FiPackage /> },
-    { label: `Wishlist (${wishlistItems.length})`, href: "/dashboard/wishlist", icon: <FiHeart /> },
-    { label: "Settings", href: "/dashboard/settings", icon: <FiSettings /> },
-    { label: "Log out", href: "#", icon: <FiLogOut />, onClick: logout },
+    { label: "Dashboard", href: "/dashboard", icon: <FiLayout className="text-moss" /> },
+    { label: "My Orders", href: "/dashboard/orders", icon: <FiPackage className="text-moss" /> },
+    { label: `Wishlist (${wishlistItems.length})`, href: "/dashboard/wishlist", icon: <FiHeart className="text-moss" /> },
+    { label: "Settings", href: "/dashboard/settings", icon: <FiSettings className="text-moss" /> },
+    { label: "Log out", href: "#", icon: <FiLogOut className="text-red-400" />, onClick: logout },
   ] : [];
 
-  // Custom renderer for account items to handle the logout click
   const renderAccountDropdown = () => {
     if (!user) return null;
 
@@ -29,8 +29,8 @@ export default function Navbar() {
       <Dropdown
         align="right"
         trigger={
-          <button className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black transition-colors hover:border-black/30">
-            <FiUser /> {user.name.split(" ")[0]} <FiChevronDown />
+          <button className="flex items-center gap-2 rounded-full border border-black/[0.03] bg-white/40 px-4 py-2.5 text-[10px] uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-white hover:shadow-soft active:scale-95">
+            <FiUser className="text-xs" /> {user.name.split(" ")[0]} <FiChevronDown className="opacity-30" />
           </button>
         }
         items={(accountItems || []).map(item => ({
@@ -42,51 +42,67 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-sand/80 backdrop-blur-md">
-      <div className="container-pad flex items-center justify-between py-4">
+    <header className="sticky top-0 z-50 w-full">
+      {/* Background Layer with subtle gradient and blur */}
+      <div className="absolute inset-0 border-b border-black/[0.03] bg-[#FAF8F6]/80 backdrop-blur-xl transition-all duration-500" />
+      
+      <div className="container-pad relative flex items-center justify-between py-5 lg:py-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="h-10 w-10 rounded-full bg-black text-sand transition-transform group-hover:scale-105">
-            <span className="flex h-full w-full items-center justify-center text-xs font-semibold tracking-[0.2em]">
+        <Link href="/" className="flex items-center gap-4 group">
+          <div className="relative h-10 w-10 flex items-center justify-center rounded-full bg-black text-sand transition-all duration-500 group-hover:rotate-[360deg] shadow-massive">
+            <span className="text-[10px] font-bold tracking-[0.2em] transform transition-transform group-hover:scale-90">
               TT
             </span>
+            <div className="absolute -inset-1 rounded-full border border-moss/20 animate-[spin_10s_linear_infinite]" />
           </div>
-          <div className="hidden sm:block">
-            <p className="font-serif text-base italic font-medium tracking-[0.1em]">
-              Thread & Timber
-            </p>
-            <p className="text-[10px] text-black/60 uppercase tracking-widest">Handcrafted apparel</p>
+          <div className="hidden lg:block overflow-hidden">
+            <motion.div
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="font-serif text-lg italic font-medium tracking-[0.05em] text-black">
+                Thread & Timber
+              </p>
+              <p className="text-[8px] text-black/30 uppercase tracking-[0.4em] font-bold mt-0.5">Handcrafted Registry</p>
+            </motion.div>
           </div>
         </Link>
 
+        {/* Center Search - Desktop Only */}
+        <div className="hidden lg:block flex-1 max-w-md mx-8">
+          <SearchBar />
+        </div>
+
         {/* Right Actions */}
-        <div className="flex items-center gap-4">
-          <div className="hidden md:block">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="lg:hidden">
             <SearchBar />
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
               renderAccountDropdown()
             ) : (
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/auth/login"
-                  className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black transition-colors hover:border-black/30"
-                >
-                  <FiUser /> <span className="hidden sm:inline">Log in</span>
-                </Link>
-              </div>
+              <Link
+                href="/auth/login"
+                className="flex items-center gap-3 rounded-full border border-black/[0.03] bg-white/40 px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-white hover:shadow-soft active:scale-95"
+              >
+                <FiUser className="text-xs" /> 
+                <span className="hidden sm:inline">Join Registry</span>
+              </Link>
             )}
 
             <Link
               href="/cart"
-              className="group relative flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-black transition-colors hover:border-black/30"
+              className="group relative flex items-center gap-3 rounded-full bg-black px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] font-bold text-sand transition-all hover:bg-black/90 shadow-xl shadow-black/10 active:scale-95"
             >
-              <FiShoppingBag className="transition-transform group-hover:scale-110" />
-              <span className="hidden sm:inline">Cart</span>
+              <FiShoppingBag className="text-xs transition-transform group-hover:-rotate-12" />
+              <span className="hidden sm:inline">Collection</span>
               {itemCount > 0 && (
-                <span className="ml-1 font-semibold">({itemCount})</span>
+                <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-sand text-black text-[8px] font-black">
+                  {itemCount}
+                </span>
               )}
             </Link>
           </div>
