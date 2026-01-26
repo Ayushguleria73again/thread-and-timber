@@ -40,9 +40,11 @@ export default function WishlistPage() {
             title="Saved for later"
             subtitle="Products you've saved to purchase later."
           />
-        
+        </div>
+
+        <div className="mt-10">
           {items.length > 0 ? (
-            <div className="mt-10 space-y-4">
+            <div className="space-y-4">
               {Object.entries(
                 items.reduce((acc: any, product: Product) => {
                   if (!acc[product.category]) acc[product.category] = [];
