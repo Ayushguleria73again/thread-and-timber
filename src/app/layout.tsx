@@ -26,6 +26,8 @@ export const metadata: Metadata = {
     "Minimal, handcrafted apparel for the makers who value texture, comfort, and story."
 };
 
+import { GlobalLoadingProvider } from "@/components/ui/GlobalLoadingProvider";
+
 export default function RootLayout({
   children
 }: {
@@ -53,17 +55,19 @@ export default function RootLayout({
           }}
         />
         <NextAuthProvider>
-          <AuthProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <RecentlyViewedProvider>
-                  <Navbar />
-                  <FloatingNav />
-                  {children}
-                </RecentlyViewedProvider>
-              </WishlistProvider>
-            </CartProvider>
-          </AuthProvider>
+          <GlobalLoadingProvider>
+            <AuthProvider>
+              <CartProvider>
+                <WishlistProvider>
+                  <RecentlyViewedProvider>
+                    <Navbar />
+                    <FloatingNav />
+                    {children}
+                  </RecentlyViewedProvider>
+                </WishlistProvider>
+              </CartProvider>
+            </AuthProvider>
+          </GlobalLoadingProvider>
         </NextAuthProvider>
       </body>
     </html>

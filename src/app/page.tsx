@@ -65,8 +65,11 @@ const values = [
 
 const CATEGORIES = ['T-Shirts', 'Jackets', 'Accessories', 'Home Goods'];
 
+import { useGlobalLoading } from "@/components/ui/GlobalLoadingProvider";
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
+  const { setIsLoading } = useGlobalLoading();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -93,11 +96,12 @@ export default function Home() {
         setProducts(allProducts);
       } finally {
         setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [setIsLoading]);
 
   const categorizedProducts = useMemo(() => {
     return CATEGORIES.reduce((acc: any, category) => {
