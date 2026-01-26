@@ -6,6 +6,7 @@ import { FiFilter, FiSearch, FiSliders } from "react-icons/fi";
 import ProductCard from "@/components/product/ProductCard";
 import FilterSidebar from "@/components/shop/FilterSidebar";
 import SectionHeading from "@/components/ui/SectionHeading";
+import CategorySlider from "@/components/product/CategorySlider";
 import { formatCurrency } from "@/lib/utils";
 import type { Product } from "@/lib/products";
 
@@ -97,85 +98,120 @@ export default function ShopClient({ products, categories }: ShopClientProps) {
     return result;
   }, [products, activeCategory, search, filters, activeTag, sortBy]);
 
+  const isSliderMode = useMemo(() => {
+    return activeCategory === "All" && 
+           search.trim() === "" && 
+           filters.materials.length === 0 && 
+           filters.colors.length === 0 && 
+           filters.sizes.length === 0 && 
+           !activeTag && 
+           sortBy === "default";
+  }, [activeCategory, search, filters, activeTag, sortBy]);
+
+  const groupedByCategory = useMemo(() => {
+    if (!isSliderMode) return {};
+    return categories.reduce((acc: any, cat) => {
+        acc[cat] = products.filter(p => p.category === cat);
+        return acc;
+    }, {});
+  }, [isSliderMode, products, categories]);
+
   return (
-    <section className="container-pad py-12">
-      <SectionHeading
-        label="Shop"
-        title="Handcrafted apparel and home goods"
-        subtitle="Browse tees, jackets, accessories, and slow-made essentials."
-      />
-      <div className="mt-8 space-y-4">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap gap-3">
-            {["All", ...categories].map((category: string) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.24em] ${
-                  activeCategory === category
-                    ? "border-black/30 bg-black text-sand"
-                    : "border-black/10 text-black/70"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-          <input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search items"
-            className="w-full rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-black outline-none md:w-64"
-          />
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-[1fr_auto]">
-          <div className="flex flex-wrap items-center gap-4 rounded-3xl border border-black/5 bg-white/70 p-4 backdrop-blur-xl">
-            <button
-               onClick={() => setIsFilterOpen(true)}
-               className="flex items-center gap-2 rounded-full bg-black px-6 py-2 text-[10px] uppercase tracking-widest text-sand shadow-lg hover:bg-black/90 transition-all"
-            >
-              <FiFilter /> Filters {(filters.materials.length + filters.colors.length + filters.sizes.length) > 0 ? `(${filters.materials.length + filters.colors.length + filters.sizes.length})` : ''}
-            </button>
-            <div className="h-6 w-px bg-black/10 mx-2" />
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag: string) => (
+    <section className="py-12">
+      <div className="container-pad">
+        <SectionHeading
+            label="Shop"
+            title="Handcrafted apparel and home goods"
+            subtitle="Browse tees, jackets, accessories, and slow-made essentials."
+        />
+        <div className="mt-8 space-y-4">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-wrap gap-3">
+                {["All", ...categories].map((category: string) => (
                 <button
-                  key={tag}
-                  onClick={() => setActiveTag(activeTag === tag ? null : tag)}
-                  className={`rounded-full border px-4 py-1.5 text-[10px] uppercase tracking-widest transition-all ${
-                    activeTag === tag
-                      ? "border-moss bg-moss text-sand shadow-sm"
-                      : "border-black/10 text-black/60 hover:border-black/30"
-                  }`}
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.24em] ${
+                    activeCategory === category
+                        ? "border-black/30 bg-black text-sand"
+                        : "border-black/10 text-black/70"
+                    }`}
                 >
-                  {tag}
+                    {category}
                 </button>
-              ))}
+                ))}
             </div>
-          </div>
+            <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search items"
+                className="w-full rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-black outline-none md:w-64"
+            />
+            </div>
 
-          <div className="flex items-center gap-3">
-            <div className="relative group">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="appearance-none rounded-full border border-black/10 bg-white px-8 py-3 text-[10px] uppercase tracking-[0.2em] text-black outline-none cursor-pointer pr-12 focus:border-moss transition-colors shadow-soft"
-              >
-                <option value="default">Default Sequence</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="newest">Latest Drops</option>
-              </select>
-              <FiFilter className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 pointer-events-none group-hover:text-black/40 transition-colors" />
+            <div className="grid gap-6 md:grid-cols-[1fr_auto]">
+            <div className="flex flex-wrap items-center gap-4 rounded-3xl border border-black/5 bg-white/70 p-4 backdrop-blur-xl">
+                <button
+                onClick={() => setIsFilterOpen(true)}
+                className="flex items-center gap-2 rounded-full bg-black px-6 py-2 text-[10px] uppercase tracking-widest text-sand shadow-lg hover:bg-black/90 transition-all"
+                >
+                <FiFilter /> Filters {(filters.materials.length + filters.colors.length + filters.sizes.length) > 0 ? `(${filters.materials.length + filters.colors.length + filters.sizes.length})` : ''}
+                </button>
+                <div className="h-6 w-px bg-black/10 mx-2" />
+                <div className="flex flex-wrap gap-2">
+                {tags.map((tag: string) => (
+                    <button
+                    key={tag}
+                    onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                    className={`rounded-full border px-4 py-1.5 text-[10px] uppercase tracking-widest transition-all ${
+                        activeTag === tag
+                        ? "border-moss bg-moss text-sand shadow-sm"
+                        : "border-black/10 text-black/60 hover:border-black/30"
+                    }`}
+                    >
+                    {tag}
+                    </button>
+                ))}
+                </div>
             </div>
-          </div>
+
+            <div className="flex items-center gap-3">
+                <div className="relative group">
+                <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as SortOption)}
+                    className="appearance-none rounded-full border border-black/10 bg-white px-8 py-3 text-[10px] uppercase tracking-[0.2em] text-black outline-none cursor-pointer pr-12 focus:border-moss transition-colors shadow-soft"
+                >
+                    <option value="default">Default Sequence</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="newest">Latest Drops</option>
+                </select>
+                <FiFilter className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 pointer-events-none group-hover:text-black/40 transition-colors" />
+                </div>
+            </div>
+            </div>
         </div>
       </div>
-      <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((product: any, index: number) => (
-          <ProductCard key={product.id} product={product} index={index} />
-        ))}
+      
+      <div className="mt-10">
+        {isSliderMode ? (
+          <div className="space-y-4">
+            {categories.map((cat) => (
+                <CategorySlider 
+                    key={cat} 
+                    category={cat} 
+                    products={groupedByCategory[cat] || []} 
+                />
+            ))}
+          </div>
+        ) : (
+          <div className="container-pad grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((product: any, index: number) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))}
+          </div>
+        )}
       </div>
       <FilterSidebar 
         isOpen={isFilterOpen}
