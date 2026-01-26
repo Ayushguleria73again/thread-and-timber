@@ -20,6 +20,7 @@ type AuthContextValue = {
   updatePreferences: (preferences: User["preferences"]) => void;
   updateAddresses: (addresses: Address[]) => void;
   refreshWalletBalance: () => Promise<void>;
+  socialLogin: (data: { email: string; name?: string; provider: string }) => Promise<boolean>;
   isAdmin: boolean;
 };
 
@@ -162,6 +163,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const socialLogin = async (socialData: { email: string; name?: string; provider: string }) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/social-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(socialData)
+      });
+
+      if (!res.ok) return false;
+
+      const data = await res.json();
+      const normalizedUser = { ...data, id: data._id || data.id };
+      localStorage.setItem("thread-timber-token", data.token);
+      setUser(normalizedUser);
+      return true;
+    } catch (error) {
+      console.error("Social Login error:", error);
+      return false;
+    }
+  };
+
   const value = useMemo(
     () => ({
       user,
@@ -171,6 +193,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       updatePreferences,
       updateAddresses,
       refreshWalletBalance,
+      socialLogin,
       isAdmin: !!user?.isAdmin
     }),
     [user]
