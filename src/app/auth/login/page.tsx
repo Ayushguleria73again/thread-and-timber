@@ -144,11 +144,11 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#FAF8F6]">
-      <section className="container-pad py-20 lg:py-32">
-        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
-            <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-moss mb-6">Studio Access</p>
-            <h1 className="font-serif text-5xl italic text-black leading-tight">Welcome back to the studio registry.</h1>
-            <p className="mt-6 text-xs uppercase tracking-widest text-black/40 max-w-md">Access your saved pieces, order history, and artisan tokens.</p>
+      <section className="container-pad py-12 lg:py-20">
+        <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-10">
+            <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-moss mb-4">Studio Access</p>
+            <h1 className="font-serif text-4xl lg:text-5xl italic text-black leading-tight">Welcome back.</h1>
+            <p className="mt-4 text-xs uppercase tracking-widest text-black/40 max-w-md">Access your artisan registry.</p>
         </div>
         
         <Suspense fallback={
