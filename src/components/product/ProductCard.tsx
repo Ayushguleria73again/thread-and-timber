@@ -49,8 +49,18 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       
       {/* Visual Header */}
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] bg-sand/40 transition-all duration-700">
-        {/* Main Product Image (Placeholder logic exists in parent) */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-tr from-clay/5 to-moss/5 transition-transform duration-[2s] ease-out group-hover:scale-110" />
+        {/* Main Product Image */}
+        <div className="absolute inset-0 z-0 transition-transform duration-[2s] ease-out group-hover:scale-110">
+          <Image
+            src={product.image || "https://images.unsplash.com/photo-1556905055-8f358a7a4bb4?q=80&w=2670&auto=format&fit=crop"}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+            priority={index < 3}
+          />
+          <div className="absolute inset-0 bg-gradient-to-tr from-clay/10 to-moss/10 mix-blend-multiply opacity-20" />
+        </div>
         
         {/* Artisan Badges */}
         <div className="absolute inset-x-4 top-4 flex items-start justify-between z-20">

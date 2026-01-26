@@ -1,17 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Head from "next/head";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/product/ProductCard";
-import CategorySlider from "@/components/product/CategorySlider";
-import SectionHeading from "@/components/ui/SectionHeading";
+
+// Dynamic Imports for Performance
+const CategorySlider = dynamic(() => import("@/components/product/CategorySlider"), { 
+  loading: () => <div className="h-96 w-full animate-pulse bg-black/5 rounded-[3rem] my-12" />
+});
+const TestimonialsSection = dynamic(() => import("@/components/ui/TestimonialsSection"));
+const RecentlyViewedSection = dynamic(() => import("@/components/product/RecentlyViewedSection"));
+const CTA = dynamic(() => import("@/components/ui/CTA"));
+
 import { allProducts, type Product } from "@/lib/products";
-import TestimonialsSection from "@/components/ui/TestimonialsSection";
-import RecentlyViewedSection from "@/components/product/RecentlyViewedSection";
-import CTA from "@/components/ui/CTA";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 // Structured Data for SEO
 const structuredData = {
@@ -93,9 +99,12 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  const getProductsByCategory = (category: string) => {
-    return products.filter(p => p.category === category);
-  };
+  const categorizedProducts = useMemo(() => {
+    return CATEGORIES.reduce((acc: any, category) => {
+      acc[category] = products.filter(p => p.category === category);
+      return acc;
+    }, {});
+  }, [products]);
 
   return (
     <>
@@ -241,7 +250,7 @@ export default function Home() {
         ) : (
           <>
             {CATEGORIES.map((category) => {
-              const categoryProducts = getProductsByCategory(category);
+              const categoryProducts = categorizedProducts[category] || [];
               return (
                 <CategorySlider
                   key={category}
