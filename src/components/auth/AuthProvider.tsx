@@ -31,6 +31,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { data: session, status } = useSession();
 
   // 1. Fetch Profile (Legacy/Internal)
@@ -58,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 2. Synchronize Social Session with Artisan Registry
   useEffect(() => {
-    if (status === "authenticated" && session?.user && !user) {
+    if (status === "authenticated" && session?.user && !user && !isLoggingOut) {
         const syncSocial = async () => {
             const ok = await socialLogin({
                 email: session.user?.email || "",
@@ -116,12 +117,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    setIsLoggingOut(true);
     localStorage.removeItem("thread-timber-token");
     setUser(null);
     try {
         await signOut({ redirect: false });
     } catch (error) {
         console.error("Social logout error:", error);
+    } finally {
+        setIsLoggingOut(false);
     }
   };
 
