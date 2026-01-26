@@ -51,7 +51,7 @@ export default function FloatingNav() {
           duration: 0.8, 
           ease: [0.16, 1, 0.3, 1] 
         }}
-        className="pointer-events-auto flex items-center p-1.5 rounded-[2rem] border border-white/40 bg-white/40 backdrop-blur-3xl shadow-massive overflow-hidden"
+        className="pointer-events-auto flex items-center p-1.5 rounded-[2rem] border border-white/40 bg-white/40 backdrop-blur-3xl shadow-massive"
       >
         <div className="flex items-center gap-1">
           <Dropdown
