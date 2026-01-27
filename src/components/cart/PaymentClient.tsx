@@ -199,6 +199,7 @@ export default function PaymentClient() {
       }
     };
 
+    setIsSubmitting(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(`${apiUrl}/orders`, {
@@ -223,6 +224,8 @@ export default function PaymentClient() {
     } catch (error) {
       console.error("Order error:", error);
       toast.error("Something went wrong. Is the server running?");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
