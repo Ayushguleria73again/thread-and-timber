@@ -4,11 +4,22 @@ export type Address = {
   label: string; // e.g., "Home", "Office"
   name: string;
   street: string;
+  apartment?: string;
   city: string;
   state: string;
   zip: string;
   country: string;
+  phone: string;
   isDefault: boolean;
+};
+
+export type SavedCard = {
+  id: string;
+  brand: string;
+  last4: string;
+  expiryMonth: number;
+  expiryYear: number;
+  cardholderName: string;
 };
 
 export type User = {
@@ -42,6 +53,8 @@ export type User = {
   wishlist?: string[];
   isAdmin?: boolean;
   walletBalance?: number;
+  savedCards?: SavedCard[];
+  upiId?: string;
 };
 
 const CURRENT_USER_KEY = "thread-timber-current-user";

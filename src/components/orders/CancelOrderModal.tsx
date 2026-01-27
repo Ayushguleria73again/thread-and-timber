@@ -7,7 +7,7 @@ import { FiX, FiAlertTriangle, FiChevronDown } from "react-icons/fi";
 type CancelOrderModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (reason: string) => void;
+  onConfirm: (reason: string, upiId?: string) => void;
   isCancelling: boolean;
 };
 
@@ -27,13 +27,14 @@ export default function CancelOrderModal({
 }: CancelOrderModalProps) {
   const [selectedReason, setSelectedReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
+  const [upiId, setUpiId] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const finalReason = selectedReason === "Other" ? otherReason : selectedReason;
     if (!finalReason) return;
-    onConfirm(finalReason);
+    onConfirm(finalReason, upiId);
   };
 
   return (
@@ -110,6 +111,20 @@ export default function CancelOrderModal({
                     )}
                   </AnimatePresence>
                 </div>
+              </div>
+
+              <div className="relative">
+                <label className="text-[9px] uppercase tracking-widest text-black/40 font-bold mb-2 block ml-1">UPI ID for Refund (Optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. username@upi"
+                  value={upiId}
+                  onChange={(e) => setUpiId(e.target.value)}
+                  className="w-full rounded-2xl border border-black/10 bg-sand/20 px-4 py-3 text-sm text-black outline-none focus:border-moss transition-colors"
+                />
+                <p className="mt-2 text-[8px] text-black/40 uppercase tracking-widest ml-1 italic">
+                  Provide your UPI ID for a direct studio settlement if balance is not restored to wallet.
+                </p>
               </div>
 
               <AnimatePresence>

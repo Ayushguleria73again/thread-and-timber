@@ -225,6 +225,16 @@ export default function OrderConfirmationPage() {
                                 <span className="text-xs font-serif italic text-black">Total Value</span>
                                 <span className="text-xl font-bold text-black">{formatCurrency(order.total || 0)}</span>
                             </div>
+                            {order.status === 'cancelled' && order.refundStatus && (
+                              <div className="mt-4 pt-4 border-t border-black/5 flex justify-between items-center">
+                                <span className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Refund Status</span>
+                                <span className={`text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full border ${
+                                    order.refundStatus === 'completed' ? 'bg-green-50 text-moss border-green-100' : 'bg-red-50 text-red-500 border-red-100'
+                                }`}>
+                                  {order.refundStatus === 'completed' ? 'Refectored' : 'Pending Processing'}
+                                </span>
+                              </div>
+                            )}
                         </div>
                     </div>
 
