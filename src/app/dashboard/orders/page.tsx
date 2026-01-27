@@ -10,6 +10,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { toast } from "sonner";
 import { downloadInvoice } from "@/lib/invoice";
 import CancelOrderModal from "@/components/orders/CancelOrderModal";
+import { useRouter } from "next/navigation";
 
 export default function OrdersPage() {
   const { user } = useAuth();
@@ -18,6 +19,8 @@ export default function OrdersPage() {
   const [selectedOrderForCancel, setSelectedOrderForCancel] = useState<any | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -143,7 +146,11 @@ export default function OrdersPage() {
             ) : (
                 <div className="space-y-6">
                     {orders.map((order: any) => (
-                        <div key={order._id} className="group overflow-hidden rounded-3xl border border-black/5 bg-white/80 transition hover:border-black/10 hover:shadow-soft">
+                        <div 
+                            key={order._id} 
+                            onClick={() => router.push(`/orders/${order._id}`)}
+                            className="group overflow-hidden rounded-3xl border border-black/5 bg-white/80 transition hover:border-black/10 hover:shadow-soft cursor-pointer"
+                        >
                             <div className="border-b border-black/5 bg-sand/20 p-6 flex flex-wrap items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
                                     <div className="rounded-full bg-white p-3 shadow-sm text-black/60">
@@ -196,20 +203,25 @@ export default function OrdersPage() {
                                 <div className="mt-6 flex justify-between items-center border-t border-black/5 pt-4">
                                     <Link 
                                         href={`/track?id=${order._id}`}
+                                        onClick={(e) => e.stopPropagation()}
                                         className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-blue-600 hover:text-black transition-colors"
                                     >
                                         <FiPackage /> Track Order
                                     </Link>
                                      <button 
                                         className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-moss hover:text-black transition-colors"
-                                        onClick={() => downloadInvoice(order)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            downloadInvoice(order);
+                                        }}
                                     >
                                         Download Invoice <FiChevronRight />
                                     </button>
 
                                     {order.status !== 'cancelled' && order.status !== 'delivered' && order.status !== 'shipped' && (
                                       <button 
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                          e.stopPropagation();
                                           setSelectedOrderForCancel(order);
                                           setIsCancelModalOpen(true);
                                         }}
