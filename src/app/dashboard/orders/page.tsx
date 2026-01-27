@@ -9,11 +9,15 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { toast } from "sonner";
 import { downloadInvoice } from "@/lib/invoice";
+import CancelOrderModal from "@/components/orders/CancelOrderModal";
 
 export default function OrdersPage() {
   const { user } = useAuth();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedOrderForCancel, setSelectedOrderForCancel] = useState<any | null>(null);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -41,6 +45,40 @@ export default function OrdersPage() {
         fetchOrders();
     }
   }, [user]);
+
+  const handleCancelOrder = async (reason: string) => {
+    if (!selectedOrderForCancel) return;
+    setIsCancelling(true);
+    const token = localStorage.getItem("thread-timber-token");
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/orders/${selectedOrderForCancel._id}/cancel`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ reason })
+      });
+
+      if (res.ok) {
+        toast.success("Order cancelled successfully");
+        // Update local state
+        const updatedOrderData = await res.json();
+        setOrders(prev => prev.map(o => o._id === selectedOrderForCancel._id ? updatedOrderData.order : o));
+        setIsCancelModalOpen(false);
+        setSelectedOrderForCancel(null);
+      } else {
+        const error = await res.json();
+        toast.error(error.message || "Failed to cancel order");
+      }
+    } catch (error) {
+      console.error("Cancel order error:", error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   if (!user) return null;
 
@@ -153,12 +191,24 @@ export default function OrdersPage() {
                                     >
                                         <FiPackage /> Track Order
                                     </Link>
-                                    <button 
+                                     <button 
                                         className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-moss hover:text-black transition-colors"
                                         onClick={() => downloadInvoice(order)}
                                     >
                                         Download Invoice <FiChevronRight />
                                     </button>
+
+                                    {order.status !== 'cancelled' && order.status !== 'delivered' && order.status !== 'shipped' && (
+                                      <button 
+                                        onClick={() => {
+                                          setSelectedOrderForCancel(order);
+                                          setIsCancelModalOpen(true);
+                                        }}
+                                        className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors ml-4"
+                                      >
+                                        Cancel Order
+                                      </button>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -169,6 +219,13 @@ export default function OrdersPage() {
       </div>
     </section>
       <Footer />
+
+      <CancelOrderModal 
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleCancelOrder}
+        isCancelling={isCancelling}
+      />
     </div>
   );
 }
