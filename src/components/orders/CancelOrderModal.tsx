@@ -52,7 +52,7 @@ export default function CancelOrderModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md overflow-hidden rounded-[2.5rem] border border-black/5 bg-white p-8 lg:p-10 shadow-massive"
+            className="relative w-full max-w-sm rounded-[2.5rem] border border-black/5 bg-white p-8 lg:p-10 shadow-massive"
           >
             <button
               onClick={onClose}
@@ -65,7 +65,7 @@ export default function CancelOrderModal({
               <FiAlertTriangle size={28} />
             </div>
 
-            <h3 className="text-2xl font-serif italic text-black">Dissolve Order</h3>
+            <h3 className="text-2xl font-serif italic text-black">Cancel Order</h3>
             <p className="mt-2 text-[10px] uppercase tracking-widest text-black/40 font-bold">Rescind Artisan Acquisition</p>
 
             <p className="mt-6 text-sm leading-relaxed text-black/60">
