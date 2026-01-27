@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiShoppingBag, FiBookOpen, FiImage, FiMail } from "react-icons/fi";
 import Dropdown from "@/components/ui/Dropdown";
 
 export default function FloatingNav() {
@@ -57,8 +57,10 @@ export default function FloatingNav() {
           <Dropdown
             side="top"
             trigger={
-              <button className="flex items-center gap-1.5 rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95">
-                Shop <FiChevronDown className="text-xs opacity-20" />
+              <button className="flex items-center gap-2 rounded-full px-4 py-3 sm:px-5 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95">
+                <FiShoppingBag className="text-sm" />
+                <span className="hidden sm:inline">Shop</span>
+                <FiChevronDown className="text-xs opacity-20 hidden sm:inline" />
               </button>
             }
             items={shopItems}
@@ -68,23 +70,26 @@ export default function FloatingNav() {
 
           <Link 
             href="/blog" 
-            className="rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
+            className="flex items-center gap-2 rounded-full px-4 py-3 sm:px-5 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
           >
-            Journal
+            <FiBookOpen className="text-sm" />
+            <span className="hidden sm:inline">Journal</span>
           </Link>
 
           <Link 
             href="/about" 
-            className="hidden sm:flex rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
+            className="flex items-center gap-2 rounded-full px-4 py-3 sm:px-5 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
           >
-            Studio
+            <FiImage className="text-sm" />
+            <span className="hidden sm:inline">Studio</span>
           </Link>
 
           <Link 
             href="/contact" 
-            className="rounded-full px-5 py-3 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
+            className="flex items-center gap-2 rounded-full px-4 py-3 sm:px-5 text-[10px] uppercase tracking-[0.3em] font-bold text-black/60 transition-all hover:bg-black/5 hover:text-black active:scale-95"
           >
-            Reach
+            <FiMail className="text-sm" />
+            <span className="hidden sm:inline">Reach</span>
           </Link>
 
           <div className="h-10 w-10 flex items-center justify-center rounded-full bg-black text-sand ml-1 cursor-pointer hover:rotate-12 transition-transform shadow-lg active:scale-90" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
