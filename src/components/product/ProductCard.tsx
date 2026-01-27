@@ -177,7 +177,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                   : "border-black/10 bg-white text-black hover:bg-black hover:text-sand hover:border-black shadow-soft"
             }`}
           >
-            <FiShoppingBag className="text-xs" /> {product.inventory === 0 ? "Empty" : "Acquire"}
+            <FiShoppingBag className="text-xs" /> {product.inventory === 0 ? "Empty" : "Add to cart"}
           </button>
         </div>
       </div>
