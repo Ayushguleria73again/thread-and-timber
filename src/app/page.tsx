@@ -21,21 +21,21 @@ import SectionHeading from "@/components/ui/SectionHeading";
 
 // Structured Data for SEO
 const structuredData = {
-  "@context": "https://schema.org",
+  "@context": "",
   "@type": "Store",
   "name": "Thread & Timber",
   "description": "Handcrafted apparel studio specializing in sustainable, small-batch clothing and artisan goods made with natural fibers.",
-  "url": "https://threadandtimber.com",
-  "logo": "https://threadandtimber.com/logo.png",
-  "image": "https://threadandtimber.com/og-image.jpg",
+  "url": "",
+  "logo": "",
+  "image": "",
   "priceRange": "₹₹-₹₹₹",
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "IN"
   },
   "sameAs": [
-    "https://instagram.com/threadandtimber",
-    "https://twitter.com/threadandtimber"
+    "",
+    ""
   ]
 };
 

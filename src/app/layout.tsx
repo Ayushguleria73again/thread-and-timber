@@ -23,7 +23,11 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Thread & Timber - Handcrafted Apparel",
   description:
-    "Minimal, handcrafted apparel for the makers who value texture, comfort, and story."
+    "Minimal, handcrafted apparel for the makers who value texture, comfort, and story.",
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  }
 };
 
 export const viewport = {
