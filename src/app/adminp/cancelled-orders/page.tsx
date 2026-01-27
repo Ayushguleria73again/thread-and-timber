@@ -57,6 +57,33 @@ export default function AdminCancelledOrdersPage() {
     }
   };
 
+  const updateRefundStatus = async (orderId: string, refundStatus: string) => {
+    const token = localStorage.getItem("thread-timber-token");
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/admin/orders/${orderId}/refund-status`, {
+        method: "PUT",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({ refundStatus })
+      });
+      if (res.ok) {
+        setOrders(prev => prev.map(o => o._id === orderId ? { ...o, refundStatus } : o));
+        toast.success(`Refund status updated to ${refundStatus}`);
+        if (refundStatus === 'completed') {
+          toast.success('Refund completion email sent to customer');
+        }
+      } else {
+        const errorData = await res.json();
+        toast.error(errorData.message || "Failed to update refund status");
+      }
+    } catch (error) {
+      toast.error("Failed to update refund status");
+    }
+  };
+
   const getRefundStatusStyle = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-moss/10 text-moss';
@@ -117,9 +144,20 @@ export default function AdminCancelledOrdersPage() {
                   </td>
                   <td className="px-6 py-5 font-bold text-red-600">{formatCurrency(order.refundAmount || order.total)}</td>
                   <td className="px-6 py-5">
-                    <span className={`rounded-full px-3 py-1 text-[8px] uppercase tracking-widest font-bold ${getRefundStatusStyle(order.refundStatus || 'pending')}`}>
-                        {order.refundStatus || 'pending'}
-                    </span>
+                    <div className="relative inline-block">
+                        <select 
+                            value={order.refundStatus || 'pending'}
+                            onChange={(e) => updateRefundStatus(order._id, e.target.value)}
+                            className={`rounded-full pl-3 pr-8 py-1.5 text-[8px] uppercase tracking-widest font-bold appearance-none cursor-pointer outline-none ring-1 ring-inset ring-transparent focus:ring-black/10 transition-all ${getRefundStatusStyle(order.refundStatus || 'pending')}`}
+                        >
+                            <option value="pending" className="bg-white text-black font-sans uppercase">pending</option>
+                            <option value="completed" className="bg-white text-black font-sans uppercase">completed</option>
+                            <option value="failed" className="bg-white text-black font-sans uppercase">failed</option>
+                        </select>
+                        <div className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-current opacity-40">
+                             <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                    </div>
                   </td>
                   <td className="px-6 py-5 text-black/40 font-medium">
                     {order.updatedAt ? new Date(order.updatedAt).toLocaleDateString() : 'N/A'}
