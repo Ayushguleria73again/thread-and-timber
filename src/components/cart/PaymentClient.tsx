@@ -212,7 +212,7 @@ export default function PaymentClient() {
         const savedOrder = await res.json();
         toast.success("Order placed successfully! Entering studio foyer...");
         clearCart();
-        router.push(`/order-success/${savedOrder._id}`);
+        router.push(`/orders/${savedOrder._id}`);
       } else {
         const errorData = await res.json();
         toast.error(errorData.message || "Failed to create order. Please try again.");
