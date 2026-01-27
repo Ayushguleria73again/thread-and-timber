@@ -58,18 +58,18 @@ export default function OrderConfirmationPage() {
      fetchOrder();
   }, [params.id, user, router]);
 
-  const handleCancelOrder = async (reason: string) => {
+  const handleCancelOrder = async (reason: string, upiId?: string) => {
     setIsCancelling(true);
     const token = localStorage.getItem("thread-timber-token");
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const res = await fetch(`${apiUrl}/orders/${params.id}/cancel`, {
+      const res = await fetch(`${apiUrl}/orders/${order._id}/cancel`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ reason })
+        body: JSON.stringify({ reason, upiId })
       });
 
       if (res.ok) {

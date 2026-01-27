@@ -46,7 +46,7 @@ export default function OrdersPage() {
     }
   }, [user]);
 
-  const handleCancelOrder = async (reason: string) => {
+  const handleCancelOrder = async (reason: string, upiId?: string) => {
     if (!selectedOrderForCancel) return;
     setIsCancelling(true);
     const token = localStorage.getItem("thread-timber-token");
@@ -58,7 +58,7 @@ export default function OrdersPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ reason })
+        body: JSON.stringify({ reason, upiId })
       });
 
       if (res.ok) {
