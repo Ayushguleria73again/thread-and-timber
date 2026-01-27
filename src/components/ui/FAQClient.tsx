@@ -39,6 +39,10 @@ const faqs = [
       {
         q: "How do I cancel my order?",
         a: "You can cancel your order directly from your Orders Portal as long as it hasn't entered the 'Shipped' or 'Delivered' stage. Simply select the order you wish to cancel and provide a reason for withdrawal."
+      },
+      {
+        q: "How will I receive my refund?",
+        a: "Refunds for cancelled orders are processed immediately. If you used your virtual wallet, the balance is restored instantly. For card payments, the refund is initiated to your original payment method and typically appears within 5-7 business days."
       }
     ]
   },

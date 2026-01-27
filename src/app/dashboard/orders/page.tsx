@@ -163,6 +163,15 @@ export default function OrdersPage() {
                                         {formatCurrency(order.total || 0)}
                                     </p>
                                 </div>
+                                {order.status === 'cancelled' && order.refundStatus && order.refundStatus !== 'none' && (
+                                    <div className="w-full mt-2 flex justify-end">
+                                      <span className={`text-[8px] uppercase tracking-widest font-bold px-3 py-1 rounded-full border ${
+                                          order.refundStatus === 'completed' ? 'bg-green-50 text-moss border-green-100' : 'bg-clay/5 text-clay border-clay/10'
+                                      }`}>
+                                        Refund {order.refundStatus}
+                                      </span>
+                                    </div>
+                                )}
                             </div>
                             <div className="p-6">
                                 <div className="space-y-4">
