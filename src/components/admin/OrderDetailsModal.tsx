@@ -76,8 +76,10 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onStatusUpda
                    <p className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-4 flex items-center gap-2"><FiMapPin /> Studio Shipping</p>
                    <div className="text-xs text-black/60 space-y-1">
                       <p>{order.shippingAddress.street}</p>
+                      {order.shippingAddress.apartment && <p>{order.shippingAddress.apartment}</p>}
                       <p>{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}</p>
                       <p>{order.shippingAddress.country}</p>
+                      {order.shippingAddress.phone && <p className="pt-2 font-bold select-all">{order.shippingAddress.phone}</p>}
                    </div>
                 </div>
             </div>
@@ -106,17 +108,43 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onStatusUpda
             {/* Financial Summary */}
             <div className="rounded-3xl border border-black/5 bg-sand/30 p-6 space-y-2">
                 <div className="flex justify-between text-xs">
-                    <span className="text-black/40 uppercase tracking-widest font-bold">Subtotal</span>
-                    <span className="font-bold">{formatCurrency(order.total - 8 - (order.total * 0.08))}</span>
+                    <span className="text-black/40 uppercase tracking-widest font-bold">Base Value</span>
+                    <span className="font-bold">{formatCurrency(order.total + (order.discountAmount || 0))}</span>
                 </div>
-                <div className="flex justify-between text-xs">
-                    <span className="text-black/40 uppercase tracking-widest font-bold">Artisan Discount</span>
-                    <span className="text-moss">-{formatCurrency(order.discountAmount || 0)}</span>
+                <div className="flex justify-between text-xs text-moss">
+                    <span className="text-current uppercase tracking-widest font-bold">Artisan Discount</span>
+                    <span className="font-bold">-{formatCurrency(order.discountAmount || 0)}</span>
                 </div>
+                {order.walletAmountUsed > 0 && (
+                  <div className="flex justify-between text-xs text-blue-600">
+                      <span className="text-current uppercase tracking-widest font-bold">Wallet Credit</span>
+                      <span className="font-bold">-{formatCurrency(order.walletAmountUsed)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm pt-2 border-t border-black/[0.03]">
-                    <span className="text-black font-bold uppercase tracking-widest">Total Amount</span>
-                    <span className="font-bold text-moss">{formatCurrency(order.total)}</span>
+                    <span className="text-black font-bold uppercase tracking-widest">Grand Total</span>
+                    <span className="font-bold text-black">{formatCurrency(order.total)}</span>
                 </div>
+
+                {order.status === 'cancelled' && (
+                  <div className="mt-6 pt-6 border-t border-black/10">
+                    <p className="text-[10px] uppercase tracking-widest font-bold text-red-500 mb-4">Refund Allocation</p>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="p-3 rounded-2xl bg-white/50 border border-red-50">
+                        <p className="text-[8px] uppercase tracking-widest text-black/30 font-bold mb-1">Refund Action</p>
+                        <p className="text-[10px] font-bold text-red-600">{order.refundStatus?.toUpperCase() || 'PENDING'}</p>
+                      </div>
+                      <div className="p-3 rounded-2xl bg-white/50 border border-red-50">
+                        <p className="text-[8px] uppercase tracking-widest text-black/30 font-bold mb-1">UPI Identity</p>
+                        <p className="text-[10px] font-bold text-black select-all">{order.refundUpiId || 'Not Provided'}</p>
+                      </div>
+                      <div className="p-3 rounded-2xl bg-white/50 border border-red-50 sm:col-span-2">
+                        <p className="text-[8px] uppercase tracking-widest text-black/30 font-bold mb-1">Amount to Refund</p>
+                        <p className="text-sm font-serif italic font-bold text-black">{formatCurrency(order.refundAmount || order.total)}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
             </div>
         </div>
 
