@@ -78,7 +78,7 @@ export default function PaymentClient() {
       : Math.min(couponData.value, applicableSubtotal);
   }, [couponData, items, subtotal]);
 
-  const shipping = 8;
+  const shipping = 500;
   const tax = subtotal * 0.08;
 
   const rawTotal = useMemo(() => {

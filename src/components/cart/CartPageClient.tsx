@@ -73,7 +73,7 @@ export default function CartPageClient() {
   };
 
   const discountAmount = calculateDiscountAmount();
-  const shipping = 8;
+  const shipping = 500;
   const tax = (subtotal - discountAmount) * 0.08;
   const total = subtotal - discountAmount + shipping + tax;
 

@@ -172,7 +172,7 @@ export default function AdminProductsPage() {
                                                 <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-white/60">
                                                     <FiLayers /> <span>{product.stock ?? product.inventory}</span>
                                                 </div>
-                                                <span className="text-xl font-serif italic text-sand">Rs.{product.price}</span>
+                                                <span className="text-xl font-serif italic text-sand">₹{product.price}</span>
                                             </div>
                                         </div>
 

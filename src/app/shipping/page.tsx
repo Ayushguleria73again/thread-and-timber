@@ -15,8 +15,8 @@ export default function ShippingPage() {
             <h3 className="mb-4 font-semibold text-black">Domestic Shipping</h3>
             <p className="text-sm text-black/70">
               Standard shipping within the United States takes 5-7 business days
-              and costs $8.00. Express shipping (2-3 business days) is available
-              for $15.00. Orders are processed within 1-2 business days.
+              and costs ₹500.00. Express shipping (2-3 business days) is available
+              for ₹1000.00. Orders are processed within 1-2 business days.
             </p>
           </div>
           <div className="rounded-3xl border border-black/5 bg-white/70 p-6">

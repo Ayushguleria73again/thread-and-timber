@@ -17,7 +17,7 @@ const faqs = [
       },
       {
         q: "What are your shipping rates?",
-        a: "Standard shipping is $8.00 for domestic orders. International rates are calculated at checkout based on destination."
+        a: "Standard shipping is ₹500.00 for domestic orders. International rates are calculated at checkout based on destination."
       }
     ]
   },
