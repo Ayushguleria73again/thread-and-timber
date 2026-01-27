@@ -34,6 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: "Orders", href: "/adminp/orders", icon: <FiTruck /> },
     { label: "Products", href: "/adminp/products", icon: <FiShoppingBag /> },
     { label: "Coupons", href: "/adminp/coupons", icon: <FiTag /> },
+    { label: "Cancelled", href: "/adminp/cancelled-orders", icon: <FiBarChart2 /> }, // Using BarChart as placeholder icon or just reuse one
     { label: "Metrics", href: "/adminp/metrics", icon: <FiLayout /> },
   ];
 
