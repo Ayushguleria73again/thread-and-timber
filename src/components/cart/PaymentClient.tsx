@@ -30,6 +30,8 @@ export default function PaymentClient() {
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [useWallet, setUseWallet] = useState(false);
+  const [isCheckoutSuccessful, setIsCheckoutSuccessful] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Address logic
   const applyAddress = (addr: any) => {
@@ -59,7 +61,7 @@ export default function PaymentClient() {
   useEffect(() => {
     if (!user) {
       router.push("/auth/login?redirect=/payment");
-    } else if (items.length === 0) {
+    } else if (items.length === 0 && !isCheckoutSuccessful) {
       router.push("/cart");
     }
   }, [user, items.length, router]);
@@ -210,6 +212,7 @@ export default function PaymentClient() {
 
       if (res.ok) {
         const savedOrder = await res.json();
+        setIsCheckoutSuccessful(true);
         toast.success("Order placed successfully! Entering studio foyer...");
         clearCart();
         router.push(`/orders/${savedOrder._id}`);
@@ -394,9 +397,10 @@ export default function PaymentClient() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           type="submit"
-          className="mt-10 flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-sand shadow-xl shadow-black/20 hover:bg-black/90 transition-all duration-300"
+          disabled={isSubmitting}
+          className="mt-10 flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-5 text-[10px] uppercase tracking-[0.3em] font-bold text-sand shadow-xl shadow-black/20 hover:bg-black/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <FiCreditCard /> Complete Artisan Acquisition — {formatCurrency(total)}
+          <FiCreditCard /> {isSubmitting ? "Processing Studio Transaction..." : `Complete Artisan Acquisition — ${formatCurrency(total)}`}
         </motion.button>
 
         <div className="mt-12 border-t border-black/5 pt-10">
