@@ -55,7 +55,7 @@ export default function SignupPage() {
         <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-10">
             <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-moss mb-4">Studio Joinery</p>
             <h1 className="font-serif text-4xl lg:text-5xl italic text-black leading-tight">Create your identity.</h1>
-            <p className="mt-4 text-xs uppercase tracking-widest text-black/40 max-w-md">Join the artisan registry.</p>
+            <p className="mt-4 text-xs uppercase tracking-widest text-black/40 max-w-md">Join the artisan community.</p>
         </div>
 
         <motion.div 

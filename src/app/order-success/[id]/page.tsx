@@ -74,7 +74,7 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
       <div className="flex h-screen items-center justify-center bg-sand">
         <div className="flex flex-col items-center gap-4">
             <div className="h-12 w-12 rounded-full border-t-2 border-black animate-spin" />
-            <p className="text-[10px] uppercase tracking-[0.3em] text-black/40">Registering acquisition...</p>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-black/40">Securing your order...</p>
         </div>
       </div>
     );
@@ -83,8 +83,8 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
   if (!order) {
     return (
         <div className="flex h-screen flex-col items-center justify-center bg-sand p-6 text-center">
-            <h2 className="font-serif text-3xl italic text-black">Registry Entry Not Found</h2>
-            <p className="mt-4 text-xs uppercase tracking-widest text-black/40">The studio could not locate this acquisition record.</p>
+            <h2 className="font-serif text-3xl italic text-black">Order Not Found</h2>
+            <p className="mt-4 text-xs uppercase tracking-widest text-black/40">The studio could not locate this order record.</p>
             <Link href="/dashboard" className="mt-8 rounded-full bg-black px-8 py-3 text-[10px] uppercase tracking-[0.3em] text-sand">
                 Return to Dashboard
             </Link>
@@ -110,8 +110,8 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
             <motion.div variants={itemVariants}>
                 <SectionHeading
                     label="Acquisition Confirmed"
-                    title="Treasures Registered."
-                    subtitle={`Registry ID: ${order._id.slice(-8).toUpperCase()}`}
+                    title="Order Confirmed."
+                    subtitle={`Order ID: ${order._id.slice(-8).toUpperCase()}`}
                 />
             </motion.div>
           </div>
@@ -151,7 +151,7 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
                             <span>{formatCurrency(order.total * 0.08)}</span>
                         </div>
                         <div className="flex justify-between font-serif text-2xl italic text-black pt-2">
-                            <span>Total Registry</span>
+                            <span>Order Total</span>
                             <span className="font-sans font-bold not-italic">{formatCurrency(order.total)}</span>
                         </div>
                     </div>
@@ -162,7 +162,7 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
                         href="/dashboard"
                         className="flex-1 rounded-full border border-black/10 bg-white px-8 py-5 text-center text-[10px] uppercase tracking-[0.3em] font-bold text-black hover:bg-black/5 transition-all flex items-center justify-center gap-2"
                     >
-                        Registry Portal
+                        Orders Portal
                     </Link>
                     <Link 
                         href="/shop"
@@ -176,7 +176,7 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
             {/* Status Sidebar */}
             <motion.div variants={itemVariants} className="space-y-6">
                 <div className="rounded-[2rem] border border-black/5 bg-white/40 p-8 shadow-soft backdrop-blur-sm">
-                    <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 mb-6 pb-4 border-b border-black/5">Acquisition Status</h4>
+                    <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 mb-6 pb-4 border-b border-black/5">Order Status</h4>
                     <div className="space-y-6">
                         <div className="flex gap-4">
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-moss/10 text-moss">
@@ -200,7 +200,7 @@ export default function OrderSuccessPage({ params }: { params: { id: string } })
                 </div>
 
                 <div className="p-6 rounded-2xl bg-sand/60 border border-black/5 italic text-black/40 text-[10px] leading-relaxed text-center">
-                    A digital certificate of this acquisition has been dispatched to your registered email.
+                    A digital certificate of this order has been dispatched to your registered email.
                 </div>
             </motion.div>
           </div>

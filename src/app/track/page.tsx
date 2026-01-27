@@ -24,7 +24,7 @@ function TrackOrderContent() {
 
   const handleTrackWithId = async (id: string) => {
     if (!id.trim()) {
-      toast.error("Please enter a Registry No.");
+      toast.error("Please enter an Order No.");
       return;
     }
 
@@ -36,7 +36,7 @@ function TrackOrderContent() {
         const data = await res.json();
         setOrder(data);
       } else {
-        toast.error("Registry entry not found. Please verify your Registry No.");
+        toast.error("Order not found. Please verify your Order No.");
         setOrder(null);
       }
     } catch (error) {
@@ -76,13 +76,13 @@ function TrackOrderContent() {
         <SectionHeading
           label="Track Dispatch"
           title="Monitor your artisan acquisition"
-          subtitle="Enter your Registry No. to view real-time dispatch status."
+          subtitle="Enter your Order No. to view real-time dispatch status."
         />
 
         <form onSubmit={handleTrack} className="mt-10 max-w-2xl mx-auto">
           <div className="rounded-3xl border border-black/5 bg-white/70 p-6">
             <label className="block text-xs uppercase tracking-widest text-black/50 mb-2">
-              Registry No. (Order ID)
+              Order No. (Order ID)
             </label>
             <div className="flex gap-3">
               <input
@@ -108,7 +108,7 @@ function TrackOrderContent() {
             <div className="rounded-3xl border border-black/5 bg-white/80 p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Registry No.</p>
+                  <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Order No.</p>
                   <p className="text-lg font-serif italic text-black mt-1">#{order._id.slice(-8).toUpperCase()}</p>
                 </div>
                 <div className={`flex items-center gap-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-widest font-semibold ${getStatusColor(order.status)}`}>

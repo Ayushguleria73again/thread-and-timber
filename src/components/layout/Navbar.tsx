@@ -64,7 +64,7 @@ export default function Navbar() {
               <p className="font-serif text-lg italic font-medium tracking-[0.05em] text-black">
                 Thread & Timber
               </p>
-              <p className="text-[8px] text-black/30 uppercase tracking-[0.4em] font-bold mt-0.5">Handcrafted Registry</p>
+              <p className="text-[8px] text-black/30 uppercase tracking-[0.4em] font-bold mt-0.5">Handcrafted Studio</p>
             </motion.div>
           </div>
         </Link>
@@ -89,7 +89,7 @@ export default function Navbar() {
                 className="flex items-center gap-3 rounded-full border border-black/[0.03] bg-white/40 px-5 py-2.5 text-[10px] uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-white hover:shadow-soft active:scale-95"
               >
                 <FiUser className="text-xs" /> 
-                <span className="hidden sm:inline">Join Registry</span>
+                <span className="hidden sm:inline">Join Us</span>
               </Link>
             )}
 

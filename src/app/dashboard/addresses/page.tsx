@@ -34,7 +34,7 @@ export default function AddressesPage() {
             </Link>
             <SectionHeading
               label="Collection Points"
-              title="Your Studio Registry"
+              title="Your Studio Addresses"
               subtitle="Curate and manage the destinations for your artisan pieces."
             />
             

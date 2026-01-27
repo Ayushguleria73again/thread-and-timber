@@ -66,7 +66,7 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
               </p>
               <div className="mt-4 flex items-center justify-center gap-2 overflow-hidden">
                 <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-black/30">
-                  Illuminating Registry
+                  Illuminating Studio
                 </p>
                 <div className="flex gap-1">
                     <motion.span 

@@ -85,7 +85,7 @@ export default function GiftCardsPage() {
         toast.error(data.message || "Invalid or already redeemed card");
       }
     } catch (error) {
-        toast.error("Studio registry error");
+        toast.error("Studio server error");
     } finally {
       setIsRedeeming(false);
     }
@@ -198,13 +198,13 @@ export default function GiftCardsPage() {
                     <div className="space-y-2">
                         <label className="text-[10px] uppercase tracking-widest font-bold text-black/40 ml-1">Dispatch Method</label>
                         <div className="flex items-center gap-2 rounded-2xl border border-black/5 bg-sand/10 px-5 py-4 text-sm text-black/40 italic">
-                            Digital Registry Drop (Email)
+                            Digital Credit Drop (Email)
                         </div>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-black/40 ml-1">Personal Registry Message (Optional)</label>
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-black/40 ml-1">Personal Message (Optional)</label>
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
@@ -244,7 +244,7 @@ export default function GiftCardsPage() {
                             <p className="text-[10px] uppercase tracking-[0.3em] opacity-40">Available Balance</p>
                             <p className="mt-2 text-3xl font-serif italic">{formatCurrency(user.walletBalance || 0)}</p>
                             <div className="mt-6 flex items-center gap-2 text-[8px] uppercase tracking-widest font-bold text-moss">
-                                <FiCreditCard /> Verified Artisan Registry
+                                <FiCreditCard /> Verified Artisan Account
                             </div>
                         </div>
 
@@ -283,7 +283,7 @@ export default function GiftCardsPage() {
                 <h4 className="font-serif text-xl italic leading-tight">Shared Himalayan Art.</h4>
                 <ul className="mt-6 space-y-4">
                     <li className="flex gap-3 text-[10px] uppercase tracking-widest opacity-80">
-                        <span className="text-moss-light">✦</span> No Registry Expiration
+                        <span className="text-moss-light">✦</span> No Expiration
                     </li>
                     <li className="flex gap-3 text-[10px] uppercase tracking-widest opacity-80">
                         <span className="text-moss-light">✦</span> Unified Studio Wallet

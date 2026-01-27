@@ -123,7 +123,7 @@ export default function ContactPage() {
                       animate={{ opacity: 1, y: 0 }}
                       className="rounded-2xl bg-moss/5 border border-moss/10 p-4 text-center text-[10px] uppercase tracking-widest text-moss font-bold mt-4"
                     >
-                      Registry entry received. We will respond shortly.
+                      Message received. We will respond shortly.
                     </motion.p>
                   )}
                   {status === "error" && (
@@ -138,7 +138,7 @@ export default function ContactPage() {
             {/* Studio Info & Socials */}
             <div className="space-y-8 lg:pt-4">
               <div className="rounded-[2.5rem] border border-black/5 bg-white/40 p-8 shadow-soft backdrop-blur-xl">
-                <h3 className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 mb-8 border-b border-black/5 pb-4">Studio Registry</h3>
+                <h3 className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 mb-8 border-b border-black/5 pb-4">Studio Info</h3>
                 
                 <div className="space-y-8">
                   <div className="flex gap-4">
@@ -193,7 +193,7 @@ export default function ContactPage() {
               <div className="rounded-[2.5rem] bg-moss p-10 text-sand shadow-lg shadow-moss/10">
                 <FiMessageSquare className="mb-4 text-3xl opacity-50" />
                 <h4 className="font-serif text-xl italic leading-tight">Join our artisan circle for first access to Himalayan drops.</h4>
-                <p className="mt-4 text-[10px] uppercase tracking-widest opacity-60">Subscriber registry open now</p>
+                <p className="mt-4 text-[10px] uppercase tracking-widest opacity-60">Subscriber list open now</p>
               </div>
             </div>
           </div>

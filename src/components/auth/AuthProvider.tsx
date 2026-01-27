@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchProfile();
   }, []);
 
-  // 2. Synchronize Social Session with Artisan Registry
+  // 2. Synchronize Social Session with Artisan Community
   useEffect(() => {
     if (status === "authenticated" && session?.user && !user && !isLoggingOut) {
         const syncSocial = async () => {
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 provider: (session as any).provider || "social"
             });
             if (ok) {
-                console.log("Social identity synchronized with artisan registry.");
+                console.log("Social identity synchronized with artisan community.");
             }
         };
         syncSocial();

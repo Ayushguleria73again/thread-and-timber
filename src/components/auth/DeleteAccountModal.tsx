@@ -34,11 +34,11 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm, isLoadi
                 <FiAlertTriangle size={32} />
             </div>
 
-            <h3 className="text-xl font-serif italic text-black">Studio Exit Registry</h3>
+            <h3 className="text-xl font-serif italic text-black">Studio Account Deletion</h3>
             <p className="mt-2 text-[10px] uppercase tracking-widest text-black/40 font-bold">Identity Revocation</p>
             
             <p className="mt-6 text-sm leading-relaxed text-black/60">
-                Are you certain you wish to permanently dissolve your studio account? This action will remove your artisan profile and saved collections from our registry.
+                Are you certain you wish to permanently dissolve your studio account? This action will remove your artisan profile and saved collections from our records.
             </p>
 
             <div className="mt-8 space-y-3 w-full">
@@ -58,7 +58,7 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm, isLoadi
             </div>
 
             <p className="mt-8 text-[9px] uppercase tracking-widest text-black/20 font-medium">
-                Historic order records will be maintained for dispatch registries.
+                Historic order records will be maintained for dispatch records.
             </p>
         </div>
       </div>

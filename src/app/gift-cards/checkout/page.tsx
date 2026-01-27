@@ -83,7 +83,7 @@ export default function GiftCardCheckoutPage() {
         localStorage.removeItem("thread-timber-gift-card-pending");
         router.push("/dashboard");
       } else {
-        toast.error("Registry transmission error");
+        toast.error("Order transmission error");
       }
     } catch (error) {
       toast.error("Studio server unavailable");
@@ -103,7 +103,7 @@ export default function GiftCardCheckoutPage() {
             className="group mb-8 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors"
           >
             <FiArrowLeft className="text-sm transition-transform group-hover:-translate-x-1" />
-            Selection Registry
+            Selection Summary
           </button>
 
           <SectionHeading

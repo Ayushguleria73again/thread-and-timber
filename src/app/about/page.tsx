@@ -29,8 +29,8 @@ const timeline = [
   },
   {
     year: "2024",
-    title: "Registry Expansion",
-    detail: "Launching our global digital registry to bring Himalayan slow-craft to mindful wardrobes across the world."
+    title: "Studio Expansion",
+    detail: "Launching our global digital presence to bring Himalayan slow-craft to mindful wardrobes across the world."
   }
 ];
 

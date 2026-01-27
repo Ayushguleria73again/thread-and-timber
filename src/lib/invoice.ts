@@ -151,11 +151,11 @@ export const downloadInvoice = (order: any) => {
                 <div class="header">
                     <div>
                         <h1 class="studio-name">Thread & Timber</h1>
-                        <div class="studio-label">Artisan Studio & Registry</div>
+                        <div class="studio-label">Artisan Studio & Orders</div>
                     </div>
                     <div class="invoice-meta">
                         <div style="margin-bottom: 20px;">
-                            <div class="meta-label">Registry No.</div>
+                            <div class="meta-label">Order No.</div>
                             <div class="meta-value">#${order._id.slice(-8).toUpperCase()}</div>
                         </div>
                         <div>
@@ -209,7 +209,7 @@ export const downloadInvoice = (order: any) => {
                         </div>
                     ` : ''}
                     <div class="total-row grand-total">
-                        <span>Total Investment</span>
+                        <span>Order Total</span>
                         <span>${formatCurrency(order.total)}</span>
                     </div>
                 </div>

@@ -133,7 +133,7 @@ export default function Home() {
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <span className="inline-block rounded-full border border-moss/10 bg-moss/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] font-bold text-moss mb-8">
-                    Artisan Registry № 021
+                    Artisan Studio № 021
                   </span>
                   
                   <h1 className="font-serif text-5xl font-light italic leading-[1.1] text-black sm:text-7xl lg:text-8xl">
@@ -221,7 +221,7 @@ export default function Home() {
                         <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/50">Journal № 04</p>
                         <h3 className="mt-3 font-serif text-2xl italic text-white leading-tight">From loom to label — a story of texture.</h3>
                         <Link href="/about" className="mt-6 flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] font-bold text-white hover:gap-5 transition-all">
-                            Read Registry <span className="h-px w-8 bg-white/30" />
+                            Read More <span className="h-px w-8 bg-white/30" />
                         </Link>
                     </div>
                 </div>
@@ -235,7 +235,7 @@ export default function Home() {
                 >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-moss/10 text-moss mb-4 font-bold text-xs italic font-serif">T&T</div>
                     <p className="text-xs font-semibold text-black leading-relaxed">Small runs. Natural dyes. Slow craft.</p>
-                    <p className="mt-2 text-[10px] text-black/40 italic">Delivered monthly to our registry members.</p>
+                    <p className="mt-2 text-[10px] text-black/40 italic">Delivered monthly to our studio members.</p>
                 </motion.div>
               </motion.div>
             </div>

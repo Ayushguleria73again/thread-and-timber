@@ -89,7 +89,7 @@ export default function DashboardPage() {
 
   const stats = [
     {
-      label: "Total Acquisitions",
+      label: "Total Orders",
       value: loading ? "..." : orders.length,
       icon: FiPackage,
       href: "/dashboard/orders",
@@ -207,7 +207,7 @@ export default function DashboardPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <FiActivity className="text-moss text-xs" />
-                      <h3 className="text-xl font-serif italic text-black leading-none">Studio Acquisitions</h3>
+                      <h3 className="text-xl font-serif italic text-black leading-none">Studio Orders</h3>
                     </div>
                     <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Documenting your support for slow craft.</p>
                   </div>
@@ -240,7 +240,7 @@ export default function DashboardPage() {
                             <div>
                                 <div className="flex items-center gap-2">
                                   <p className="text-sm font-bold text-black">
-                                      Registry #{order._id?.slice(-6).toUpperCase()}
+                                      Order #{order._id?.slice(-6).toUpperCase()}
                                   </p>
                                   <span className={`h-1.5 w-1.5 rounded-full ${order.status === 'delivered' ? 'bg-moss' : 'bg-amber-400'}`} />
                                 </div>
@@ -277,7 +277,7 @@ export default function DashboardPage() {
               <div className="space-y-8">
                 <motion.div variants={itemVariants} className="rounded-[2.5rem] border border-black/5 bg-white/70 p-8 lg:p-10 shadow-soft backdrop-blur-xl">
                   <div className="mb-8">
-                    <h3 className="text-lg font-serif italic text-black leading-none">Artisan Registry</h3>
+                    <h3 className="text-lg font-serif italic text-black leading-none">Order Management</h3>
                     <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold mt-2">Personal studio controls.</p>
                   </div>
                   <div className="space-y-4">
@@ -309,7 +309,7 @@ export default function DashboardPage() {
                   <h4 className="font-serif text-xl italic leading-tight mb-2">Artisan Support</h4>
                   <p className="text-[10px] text-sand/60 uppercase tracking-widest leading-relaxed mb-6">Need specialist assistance?</p>
                   <p className="text-xs leading-relaxed italic opacity-80 mb-8">
-                    Our studio team is available for bespoke queries, registry updates, or acquisition help.
+                    Our studio team is available for bespoke queries, order updates, or acquisition help.
                   </p>
                   <a 
                     href="mailto:studio@threadtimber.co" 
