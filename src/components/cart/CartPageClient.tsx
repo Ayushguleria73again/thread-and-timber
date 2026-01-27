@@ -154,12 +154,60 @@ export default function CartPageClient() {
           <p className="text-xs uppercase tracking-[0.3em] text-moss">
             Order summary
           </p>
-          <div className="mt-6 space-y-3">
+          <div className="mt-6 space-y-4">
+            {/* Coupon Section */}
+            <div className="border-b border-black/5 pb-4">
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <FiTag className="absolute left-3 top-1/2 -translate-y-1/2 text-moss" />
+                  <input
+                    type="text"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                    placeholder="Have a coupon?"
+                    className="w-full rounded-2xl border border-black/10 bg-white/50 py-2.5 pl-10 pr-4 text-sm placeholder:text-black/30 focus:border-black/20 focus:outline-none"
+                  />
+                </div>
+                <button
+                  onClick={handleApplyDiscount}
+                  disabled={isValidating || !discountCode.trim()}
+                  className="rounded-2xl bg-black px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-sand transition-all hover:bg-black/90 disabled:opacity-50"
+                >
+                  {isValidating ? "..." : "Apply"}
+                </button>
+              </div>
+              {discountError && (
+                <p className="mt-2 text-[10px] text-red-500">{discountError}</p>
+              )}
+              {appliedDiscount && (
+                <div className="mt-2 flex items-center justify-between rounded-xl bg-moss/10 px-3 py-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-moss">
+                    Coupon "{appliedDiscount.code}" applied
+                  </span>
+                  <button
+                    onClick={() => {
+                      setAppliedDiscount(null);
+                      setDiscountCode("");
+                    }}
+                    className="text-moss hover:text-moss/80"
+                  >
+                    <FiTrash2 size={12} />
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="space-y-3 text-sm text-black/70">
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span>{formatCurrency(subtotal)}</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex justify-between text-moss font-medium">
+                  <span>Discount</span>
+                  <span>-{formatCurrency(discountAmount)}</span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span>Shipping</span>
                 <span>{formatCurrency(shipping)}</span>
@@ -168,7 +216,7 @@ export default function CartPageClient() {
                 <span>Tax</span>
                 <span>{formatCurrency(tax)}</span>
               </div>
-              <div className="flex justify-between text-base font-semibold text-black">
+              <div className="flex justify-between text-base font-semibold text-black pt-2 border-t border-black/5">
                 <span>Total</span>
                 <span>{formatCurrency(total)}</span>
               </div>
