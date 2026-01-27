@@ -38,12 +38,20 @@ const AddressForm = ({
                 value={formData.name || ""}
                 onChange={e => setFormData({...formData, name: e.target.value})}
             />
-            <input 
-                placeholder="Street Address" 
-                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
-                value={formData.street || ""}
-                onChange={e => setFormData({...formData, street: e.target.value})}
-            />
+            <div className="grid grid-cols-2 gap-3">
+                <input 
+                    placeholder="Street Address" 
+                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                    value={formData.street || ""}
+                    onChange={e => setFormData({...formData, street: e.target.value})}
+                />
+                <input 
+                    placeholder="Apt, Suite, etc. (Optional)" 
+                    className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                    value={formData.apartment || ""}
+                    onChange={e => setFormData({...formData, apartment: e.target.value})}
+                />
+            </div>
             <div className="grid grid-cols-2 gap-3">
                 <input 
                     placeholder="City" 
@@ -75,6 +83,13 @@ const AddressForm = ({
                     </select>
                 </div>
             </div>
+            <input 
+                placeholder="Phone Number (Required for Dispatch)" 
+                type="tel"
+                className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss transition-colors text-black"
+                value={formData.phone || ""}
+                onChange={e => setFormData({...formData, phone: e.target.value})}
+            />
             <select 
                 className="w-full rounded-xl border border-black/10 bg-sand/20 px-4 py-3 text-sm outline-none focus:border-moss appearance-none cursor-pointer text-black"
                 value={formData.label || "Home"}
@@ -134,10 +149,12 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
           isDefault: addresses.length === 0,
           name: formData.name as string,
           street: formData.street as string,
+          apartment: formData.apartment,
           city: formData.city as string,
           state: formData.state as string,
           zip: formData.zip as string,
-          country: formData.country || "India"
+          country: formData.country || "India",
+          phone: formData.phone as string
       };
       onUpdate([...addresses, address]);
       setIsAdding(false);
@@ -203,9 +220,14 @@ export default function AddressBook({ addresses, onUpdate }: AddressBookProps) {
                           {address.isDefault && <span className="text-[9px] font-bold uppercase tracking-widest text-moss">Default Dispatch</span>}
                       </div>
                       <p className="text-sm font-bold text-black">{address.name}</p>
-                      <p className="mt-1 text-xs text-black/60 leading-relaxed">{address.street}</p>
+                      <p className="mt-1 text-xs text-black/60 leading-relaxed">
+                        {address.street} {address.apartment && `, ${address.apartment}`}
+                      </p>
                       <p className="text-xs text-black/60">{address.city}, {address.state} {address.zip}</p>
-                      <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/20">{address.country}</p>
+                      <div className="flex items-center gap-4 mt-2">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-black/20">{address.country}</p>
+                        <p className="text-[10px] font-bold text-moss/60">{address.phone}</p>
+                      </div>
                     </div>
                     
                     <div className="flex flex-col gap-2">

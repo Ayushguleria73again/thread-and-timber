@@ -176,7 +176,7 @@ export const downloadInvoice = (order: any) => {
                     <div>
                         <div class="address-title">Dispatch Address</div>
                         <div class="address-content">
-                            ${order.shippingAddress.street}<br>
+                            ${order.shippingAddress.street}${order.shippingAddress.apartment ? `, ${order.shippingAddress.apartment}` : ''}<br>
                             ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}<br>
                             ${order.shippingAddress.country}
                         </div>

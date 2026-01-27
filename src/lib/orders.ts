@@ -19,11 +19,13 @@ export type Order = {
   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   shippingAddress: {
     name: string;
-    address: string;
+    street: string;
+    apartment?: string;
     city: string;
     state: string;
     zip: string;
     country: string;
+    phone: string;
   };
   paymentMethod: string;
   createdAt: string;
