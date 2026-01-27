@@ -11,6 +11,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { formatCurrency } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import CancelOrderModal from "@/components/orders/CancelOrderModal";
 
 const statusSteps = [
   { key: "pending", label: "Studio Received", icon: FiCheckCircle },
@@ -23,8 +24,10 @@ export default function OrderConfirmationPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const [order, setOrder] = useState<any | null>(null);
+   const [order, setOrder] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -52,8 +55,40 @@ export default function OrderConfirmationPage() {
       }
     };
 
-    fetchOrder();
+     fetchOrder();
   }, [params.id, user, router]);
+
+  const handleCancelOrder = async (reason: string) => {
+    setIsCancelling(true);
+    const token = localStorage.getItem("thread-timber-token");
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/orders/${params.id}/cancel`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ reason })
+      });
+
+      if (res.ok) {
+        toast.success("Order cancelled successfully");
+        // Refetch order to show updated status
+        const updatedOrder = await res.json();
+        setOrder(updatedOrder.order);
+        setIsCancelModalOpen(false);
+      } else {
+        const error = await res.json();
+        toast.error(error.message || "Failed to cancel order");
+      }
+    } catch (error) {
+      console.error("Cancel order error:", error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   if (loading) return (
       <div className="flex h-screen items-center justify-center bg-sand text-ink/40">
@@ -205,12 +240,21 @@ export default function OrderConfirmationPage() {
                         </div>
                     </div>
 
-                    <Link 
+                     <Link 
                       href="/dashboard/orders"
                       className="flex items-center justify-center gap-2 w-full rounded-full border border-black/5 bg-white py-4 text-[10px] uppercase tracking-widest text-black hover:bg-clay/10 transition-colors"
                     >
                       <FiArrowLeft /> View All Orders
                     </Link>
+
+                    {order.status !== 'cancelled' && order.status !== 'delivered' && order.status !== 'shipped' && (
+                      <button 
+                        onClick={() => setIsCancelModalOpen(true)}
+                        className="flex items-center justify-center gap-2 w-full rounded-full border border-red-500/20 bg-red-50/50 py-4 text-[10px] uppercase tracking-widest text-red-500 hover:bg-red-50 transition-colors mt-4"
+                      >
+                        Cancel Artisan Order
+                      </button>
+                    )}
                 </aside>
 
                 <div className="rounded-[2.5rem] border border-black/5 bg-black p-8 text-sand overflow-hidden relative group">
@@ -224,7 +268,14 @@ export default function OrderConfirmationPage() {
           </div>
         </div>
       </section>
-      <Footer />
+       <Footer />
+
+      <CancelOrderModal 
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleCancelOrder}
+        isCancelling={isCancelling}
+      />
     </div>
   );
 }
