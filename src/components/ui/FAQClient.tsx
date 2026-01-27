@@ -35,6 +35,10 @@ const faqs = [
       {
         q: "Are refunds processed immediately?",
         a: "Refunds are processed within 5-7 business days after we receive and inspect the returned item."
+      },
+      {
+        q: "How do I cancel my order?",
+        a: "You can cancel your order directly from your Orders Portal as long as it hasn't entered the 'Shipped' or 'Delivered' stage. Simply select the order you wish to cancel and provide a reason for withdrawal."
       }
     ]
   },
